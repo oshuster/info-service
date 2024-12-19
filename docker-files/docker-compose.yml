@@ -1,0 +1,34 @@
+services:
+  prof-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: "prof-service:${VERSION}"
+    container_name: prof-service
+    ports:
+      - 8183:8183
+    restart: always
+    volumes:
+      - "/usr/local/servers/prof-service/logs:/app/prof-service/logs"
+      - "/usr/local/servers/prof-service/inputFiles/profXlsx:/app/prof-service/inputFiles/profXlsx"
+    environment:
+      PORT: 8183
+      LOG_LEVEL: "info"
+      ENVIRONMENT: "PRODUCTION"
+      XLS_FILE_PATH: /app/prof-service/inputFiles/
+      XLS_PROFESSION_PATH: "/app/prof-service/inputFiles/profXlsx"
+      SCHEMA_NAME: prof_service
+      # DB_SETTINGS
+      DB_INIT: false
+      DB_USER: gdzapp
+      DB_HOST: postgresql
+      DB_DATABASE: host
+      DB_PASSWORD: password
+      DB_PORT: 5432
+
+    networks:
+      - gdz_network
+
+networks:
+  gdz_network:
+    external: true
