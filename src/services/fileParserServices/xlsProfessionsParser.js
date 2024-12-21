@@ -5,6 +5,8 @@ import { migrationLogger, serviceLogger } from '../../config/logConfig.js';
 import { logError } from '../../config/logError.js';
 
 export const parseAndInsertXlsx = async (client, file, options) => {
+  const filePath = file?.path;
+
   try {
     const { tableName, schemaName, insertQuery, processRow } = options;
 
@@ -16,7 +18,6 @@ export const parseAndInsertXlsx = async (client, file, options) => {
       throw HttpError(400, 'No file provided');
     }
 
-    const filePath = file.path; // Шлях до тимчасового файлу, створеного multer
     serviceLogger.debug(`Path to temporary file: ${filePath}`);
 
     // Відкриття та парсинг файлу
@@ -64,10 +65,6 @@ export const parseAndInsertXlsx = async (client, file, options) => {
     }
 
     migrationLogger.info(`Migration for table '${tableName}' completed`);
-
-    // Видалення тимчасового файлу
-    fs.unlinkSync(filePath);
-    serviceLogger.debug(`Temporary file deleted: ${filePath}`);
   } catch (error) {
     serviceLogger.error('Error parsing and inserting data:', error);
     logError(error, null, 'Failed to parse XLS and insert data');
@@ -75,5 +72,16 @@ export const parseAndInsertXlsx = async (client, file, options) => {
       500,
       `Failed to parse XLS and insert data: ${error.message}`
     );
+  } finally {
+    if (filePath && fs.existsSync(filePath)) {
+      try {
+        fs.unlinkSync(filePath);
+        serviceLogger.debug(`Temporary file deleted: ${filePath}`);
+      } catch (deleteError) {
+        serviceLogger.error(
+          `Failed to delete temporary file: ${deleteError.message}`
+        );
+      }
+    }
   }
 };
