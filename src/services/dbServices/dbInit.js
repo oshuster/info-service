@@ -7,6 +7,7 @@ import { logError } from '../../config/logError.js';
 import { tableName } from '../../common/tablesName.js';
 import { professionsQuery } from '../../postgresQuery/professionQuery.js';
 import { taxObjectsQuery } from '../../postgresQuery/taxObjectsQuery.js';
+import { katotgQuery } from '../../postgresQuery/katotgQuery.js';
 
 const SCHEMA_NAME = process.env.SCHEMA_NAME || 'info-service';
 
@@ -49,6 +50,16 @@ export const initializeDatabase = async () => {
     await client.query(taxObjectsQuery.createTaxObjectsTableQuery);
     serviceLogger.info(
       `Database table for ${tableName.taxObjects} in schema ${SCHEMA_NAME} created successfully`
+    );
+
+    // КАТОТГ
+    serviceLogger.debug(
+      'Executing query: ',
+      katotgQuery.createKatotgTableQuery
+    );
+    await client.query(katotgQuery.createKatotgTableQuery);
+    serviceLogger.info(
+      `Database table for ${tableName.katotg} in schema ${SCHEMA_NAME} created successfully`
     );
 
     return client;
