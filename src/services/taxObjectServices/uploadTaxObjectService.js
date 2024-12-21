@@ -1,33 +1,34 @@
 import { logError } from '../../config/logError.js';
 import 'dotenv/config';
 import { clearDuplicates } from '../dbServices/clearDublicates.js';
-import { professionsQuery } from '../../postgresQuery/professionQuery.js';
 import { parseAndInsertXlsx } from '../fileParserServices/xlsProfessionsParser.js';
 import { tableName } from '../../common/tablesName.js';
+import { cleanField } from '../../helpers/cleanField.js';
 import { migrationLogger } from '../../config/logConfig.js';
+import { taxObjectsQuery } from '../../postgresQuery/taxObjectsQuery.js';
 
-export const uploadProfessionService = async (client, file) => {
+export const uploadTaxObjectService = async (client, file) => {
   try {
     const queries = {
-      count: professionsQuery.countDuplicatesQuery,
-      clear: professionsQuery.clearQuery,
+      count: taxObjectsQuery.countDuplicatesQuery,
+      clear: taxObjectsQuery.clearQuery,
     };
 
     const options = {
-      tableName: tableName.professions,
-      insertQuery: professionsQuery.insertQuery,
+      tableName: tableName.taxObjects,
+      insertQuery: taxObjectsQuery.insertQuery,
       processRow: (row, index) => {
-        const codeKp = row['КОД КП'];
-        const name = row['ПРОФЕСІЙНА НАЗВА РОБОТИ'];
+        const rowType = cleanField(row['TYPE']);
+        const rowName = cleanField(row['NAME_OBJ']);
 
-        if (!codeKp || !name) {
+        if (!rowType || !rowName) {
           migrationLogger.warn(
-            `Skipping row ${index + 1} due to missing data: CODE KP or NAME`
+            `Skipping row ${index + 1} due to missing data: TYPE or NAME`
           );
           return null;
         }
 
-        return [codeKp, name];
+        return [rowType, rowName];
       },
     };
     await parseAndInsertXlsx(client, file, options);

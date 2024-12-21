@@ -45,20 +45,20 @@ export const parseAndInsertXlsx = async (client, file, options) => {
     // Процес вставки рядків у базу даних
     for (let index = 0; index < rows.length; index++) {
       const row = rows[index];
-      migrationLogger.debug(`Row ${index}: ${JSON.stringify(row)}`);
+      migrationLogger.debug(`Row ${index + 1}: ${JSON.stringify(row)}`);
 
       try {
         const processedData = processRow(row, index);
         if (!processedData) {
-          migrationLogger.warn(`Skipping row ${index} due to missing data`);
+          migrationLogger.warn(`Skipping row ${index + 1} due to missing data`);
           continue;
         }
 
         await client.query(insertQuery, processedData);
-        migrationLogger.debug(`Row ${index} inserted successfully.`);
+        migrationLogger.debug(`Row ${index + 1} inserted successfully.`);
       } catch (insertError) {
         serviceLogger.error(
-          `Error inserting row ${index}: ${insertError.message}`
+          `Error inserting row ${index + 1}: ${insertError.message}`
         );
       }
     }
