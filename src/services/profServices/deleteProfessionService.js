@@ -1,8 +1,7 @@
-import { logError } from "../../config/logError.js";
-import "dotenv/config";
-import HttpError from "../../helpers/HttpError.js";
+import { logError } from '../../config/logError.js';
+import 'dotenv/config';
 
-const SCHEMA_NAME = process.env.SCHEMA_NAME || "prof_service";
+const SCHEMA_NAME = process.env.SCHEMA_NAME || 'info_service';
 
 export const deleteProfessionService = async (client, id) => {
   try {
@@ -24,8 +23,8 @@ export const deleteProfessionService = async (client, id) => {
     // Повернення даних видаленого ітема
     return result.rows[0];
   } catch (error) {
-    console.error("Failed to delete profession", error);
-    logError(error, null, "Failed to delete profession");
-    throw new Error("Failed to delete profession");
+    console.error('Failed to delete profession', error);
+    logError(error, null, 'Failed to delete profession');
+    throw new Error('Failed to delete profession');
   }
 };

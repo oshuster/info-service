@@ -1,16 +1,21 @@
-import { logError } from "../../config/logError.js";
-import { createProfessionService } from "../../services/profServices/createProfessionService.js";
+import { logError } from '../../config/logError.js';
+import { uploadProfessionService } from '../../services/profServices/uploadProfessionService.js';
 
 export const uploadProfController = async (req, res) => {
   try {
-    const result = await createProfessionService(req.client, req.body);
+    if (!req.file) {
+      return res.status(400).json({ message: 'Файл не надано' });
+    }
 
-    res.json(result);
+    uploadProfessionService(req.client, req.file);
+
+    res.json({
+      message:
+        'File uploaded successfully. Data will be updated within 1-15 minutes.',
+    });
   } catch (error) {
-    console.error("Error in profController:", error);
-    logError(error, req, "Error in profController");
-    res
-      .status(500)
-      .json({ error: "Failed to create in classifier of professions" });
+    console.error('Error loading file in profController:', error);
+    logError(error, req, 'Error loading file in profController');
+    res.status(500).json({ error: 'Error loading file in profController' });
   }
 };

@@ -26,6 +26,7 @@ export const initializeDatabase = async () => {
     const createSchemaQuery = `CREATE SCHEMA IF NOT EXISTS ${SCHEMA_NAME};`;
     serviceLogger.debug("Executing query: ", createSchemaQuery);
     await client.query(createSchemaQuery);
+    serviceLogger.info(`Schema created successfully: ${SCHEMA_NAME}`);
 
     // CREATING TABLES
     // довідник професій
@@ -38,8 +39,9 @@ export const initializeDatabase = async () => {
     `;
     serviceLogger.debug("Executing query: ", createProfessionsTableQuery);
     await client.query(createProfessionsTableQuery);
-
-    serviceLogger.info("Database tables initialized in schema 'prof_service'");
+    serviceLogger.info(
+      `Database table for ${tableName.professions} in schema ${SCHEMA_NAME} created successfully`
+    );
 
     return client;
   } catch (error) {

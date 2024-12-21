@@ -1,7 +1,7 @@
-import { logError } from "../../config/logError.js";
-import "dotenv/config";
+import { logError } from '../../config/logError.js';
+import 'dotenv/config';
 
-const SCHEMA_NAME = process.env.SCHEMA_NAME || "prof_service";
+const SCHEMA_NAME = process.env.SCHEMA_NAME || 'info_service';
 
 export const createProfessionService = async (client, professionData) => {
   try {
@@ -25,8 +25,8 @@ export const createProfessionService = async (client, professionData) => {
       name: result.rows[0].name,
     };
   } catch (error) {
-    console.error("Failed to create profession", error);
-    logError(error, null, "Failed to create profession");
-    throw new Error("Failed to create profession");
+    console.error('Failed to create profession', error);
+    logError(error, null, 'Failed to create profession');
+    throw new Error('Failed to create profession');
   }
 };

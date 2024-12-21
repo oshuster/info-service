@@ -1,15 +1,18 @@
-import express from "express";
-import { logRequest } from "../config/logConfig.js";
-import { checkQueryParam } from "../helpers/checkQueryParams.js";
-import { ctrlWrapper } from "../helpers/ctrlWrapper.js";
-import { addUuidMiddleware } from "../middlewares/addUuidMiddleware.js";
-import { editProfessionSchema } from "../schemas/editSchema.js";
-import { createProfessionSchema } from "../schemas/createSchema.js";
-import { validateRequest } from "../middlewares/validateProfession.js";
-import { editProfController } from "../controllers/professionsControlers/editProfController.js";
-import { profController } from "../controllers/professionsControlers/searchProfController.js";
-import { createProfController } from "../controllers/professionsControlers/createProfController.js";
-import { deleteProfController } from "../controllers/professionsControlers/deleteProfController.js";
+import express from 'express';
+import { logRequest } from '../config/logConfig.js';
+import { checkQueryParam } from '../helpers/checkQueryParams.js';
+import { ctrlWrapper } from '../helpers/ctrlWrapper.js';
+import { addUuidMiddleware } from '../middlewares/addUuidMiddleware.js';
+import { editProfessionSchema } from '../schemas/editSchema.js';
+import { createProfessionSchema } from '../schemas/createSchema.js';
+import { validateRequest } from '../middlewares/validateProfession.js';
+import { editProfController } from '../controllers/professionsControlers/editProfController.js';
+import { profController } from '../controllers/professionsControlers/searchProfController.js';
+import { createProfController } from '../controllers/professionsControlers/createProfController.js';
+import { deleteProfController } from '../controllers/professionsControlers/deleteProfController.js';
+import { uploadProfController } from '../controllers/professionsControlers/uploadProfController.js';
+import { upload } from '../middlewares/multerMiddleware.js';
+import { checkExcelFile } from '../middlewares/checkExcelFile.js';
 
 const professionsRouter = express.Router();
 
@@ -54,8 +57,8 @@ professionsRouter.use(logRequest);
  */
 
 professionsRouter.get(
-  "/search",
-  checkQueryParam(["q"]),
+  '/professions/search',
+  checkQueryParam(['q']),
   ctrlWrapper(profController)
 );
 
@@ -86,7 +89,7 @@ professionsRouter.get(
  */
 
 professionsRouter.post(
-  "/create",
+  '/professions/create',
   validateRequest(createProfessionSchema),
   ctrlWrapper(createProfController)
 );
@@ -119,8 +122,8 @@ professionsRouter.post(
  */
 
 professionsRouter.delete(
-  "/delete",
-  checkQueryParam(["id"]),
+  '/professions/delete',
+  checkQueryParam(['id']),
   ctrlWrapper(deleteProfController)
 );
 
@@ -153,9 +156,44 @@ professionsRouter.delete(
  */
 
 professionsRouter.patch(
-  "/edit",
+  '/professions/edit',
   validateRequest(editProfessionSchema),
   ctrlWrapper(editProfController)
+);
+
+/**
+ * @swagger
+ * /upload:
+ *   patch:
+ *     summary: Редагування професії
+ *     description: Оновлює професію за ID.
+ *     tags: [Professions]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/EditProfession'
+ *     responses:
+ *       200:
+ *         description: Професія успішно оновлена.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Profession'
+ *       400:
+ *         description: Помилка валідації даних.
+ *       404:
+ *         description: Професія не знайдена.
+ *       500:
+ *         description: Внутрішня помилка сервера.
+ */
+
+professionsRouter.post(
+  '/professions/upload',
+  upload.single('file'),
+  checkExcelFile,
+  uploadProfController
 );
 
 export default professionsRouter;

@@ -1,8 +1,7 @@
-import { logError } from "../../config/logError.js";
-import "dotenv/config";
-import HttpError from "../../helpers/HttpError.js";
+import { logError } from '../../config/logError.js';
+import 'dotenv/config';
 
-const SCHEMA_NAME = process.env.SCHEMA_NAME || "prof_service";
+const SCHEMA_NAME = process.env.SCHEMA_NAME || 'info_service';
 
 export const editProfessionService = async (client, professionData) => {
   try {
@@ -33,8 +32,8 @@ export const editProfessionService = async (client, professionData) => {
       name: result.rows[0].name,
     };
   } catch (error) {
-    console.error("Failed to edit profession", error);
-    logError(error, null, "Failed to edit profession");
-    throw new Error("Failed to edit profession");
+    console.error('Failed to edit profession', error);
+    logError(error, null, 'Failed to edit profession');
+    throw new Error('Failed to edit profession');
   }
 };

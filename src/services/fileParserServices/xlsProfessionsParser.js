@@ -1,42 +1,27 @@
-import fs from "fs";
-import path from "path";
-import xlsx from "xlsx";
-import HttpError from "../../helpers/HttpError.js";
-import { migrationLogger, serviceLogger } from "../../config/logConfig.js";
-import { logError } from "../../config/logError.js";
-import { insertProfessionRow } from "./insertProfessionRow.js";
+import fs from 'fs';
+import xlsx from 'xlsx';
+import HttpError from '../../helpers/HttpError.js';
+import { migrationLogger, serviceLogger } from '../../config/logConfig.js';
+import { logError } from '../../config/logError.js';
 
-export const xlsProfessionsParse = async (client, xlsDirectory) => {
+export const parseAndInsertXlsx = async (client, file, options) => {
   try {
-    serviceLogger.debug(`Початок парсингу. Каталог XLS: ${xlsDirectory}`);
+    const { tableName, schemaName, insertQuery, processRow } = options;
 
-    // Перевірка наявності файлів у каталозі
-    const files = fs
-      .readdirSync(xlsDirectory)
-      .filter((file) => file.endsWith(".xlsx") || file.endsWith(".xls"));
+    serviceLogger.debug(`Start parsing the file: ${file.originalname}`);
 
-    serviceLogger.debug(`Знайдено файлів: ${files.length}`);
-    serviceLogger.debug(`Файли: ${files.join(", ")}`);
-
-    if (!files.length) {
-      throw HttpError(
-        400,
-        "No XLS or XLSX files found in the 'profXlsx' directory"
-      );
+    // Перевірка наявності файлу
+    if (!file) {
+      serviceLogger.error('File not transferred');
+      throw HttpError(400, 'No file provided');
     }
 
-    const xlsFilePath = path.resolve(xlsDirectory, files[0]);
-    serviceLogger.debug(`FILE PATH (professions): ${xlsFilePath}`);
-
-    // Перевірка наявності конкретного файлу
-    if (!fs.existsSync(xlsFilePath)) {
-      serviceLogger.error(`Файл не знайдено за шляхом: ${xlsFilePath}`);
-      throw HttpError(400, "XLS or XLSX file not found");
-    }
+    const filePath = file.path; // Шлях до тимчасового файлу, створеного multer
+    serviceLogger.debug(`Path to temporary file: ${filePath}`);
 
     // Відкриття та парсинг файлу
-    serviceLogger.debug("Читання XLS файлу...");
-    const workFile = xlsx.readFile(xlsFilePath);
+    serviceLogger.debug('Reading an XLS file...');
+    const workFile = xlsx.readFile(filePath);
 
     const sheetNames = workFile.SheetNames;
     serviceLogger.debug(`Sheet Names: ${sheetNames}`);
@@ -44,43 +29,51 @@ export const xlsProfessionsParse = async (client, xlsDirectory) => {
     const worksheet = workFile.Sheets[sheetNames[0]];
     const rows = xlsx.utils.sheet_to_json(worksheet);
 
-    serviceLogger.debug(`Кількість рядків: ${rows.length}`);
+    serviceLogger.debug(`Number of rows: ${rows.length}`);
 
     if (!rows.length) {
-      serviceLogger.warn("XLS or XLSX file is empty or improperly formatted");
-      throw HttpError(400, "XLS or XLSX file is empty or improperly formatted");
+      serviceLogger.warn(
+        'The XLS or XLSX file is empty or incorrectly formatted'
+      );
+      throw HttpError(400, 'XLS or XLSX file is empty or improperly formatted');
     }
 
-    serviceLogger.info(
-      `Parsed ${rows.length} rows from the XLS file (professions)`
+    migrationLogger.info(
+      `Parsed ${rows.length} rows from the XLS file (table: ${tableName})`
     );
 
     // Процес вставки рядків у базу даних
     for (let index = 0; index < rows.length; index++) {
       const row = rows[index];
-      serviceLogger.debug(`Row ${index}: ${JSON.stringify(row)}`);
+      migrationLogger.debug(`Row ${index}: ${JSON.stringify(row)}`);
 
       try {
-        await insertProfessionRow(client, row, index);
-        serviceLogger.debug(`Row ${index} успішно вставлено.`);
+        const processedData = processRow(row, index);
+        if (!processedData) {
+          migrationLogger.warn(`Skipping row ${index} due to missing data`);
+          continue;
+        }
+
+        await client.query(insertQuery, processedData);
+        migrationLogger.debug(`Row ${index} inserted successfully.`);
       } catch (insertError) {
         serviceLogger.error(
-          `Помилка при вставці рядка ${index}: ${insertError.message}`
+          `Error inserting row ${index}: ${insertError.message}`
         );
       }
     }
 
-    migrationLogger.info("Migration for 'professions' completed");
+    migrationLogger.info(`Migration for table '${tableName}' completed`);
+
+    // Видалення тимчасового файлу
+    fs.unlinkSync(filePath);
+    serviceLogger.debug(`Temporary file deleted: ${filePath}`);
   } catch (error) {
-    serviceLogger.error("Помилка при парсингу та вставці даних:", error);
-    logError(
-      error,
-      null,
-      "Failed to parse XLS and insert data for 'professions'"
-    );
+    serviceLogger.error('Error parsing and inserting data:', error);
+    logError(error, null, 'Failed to parse XLS and insert data');
     throw HttpError(
       500,
-      `Failed to parse XLS and insert data for 'professions': ${error.message}`
+      `Failed to parse XLS and insert data: ${error.message}`
     );
   }
 };
