@@ -1,3 +1,5 @@
 export const tableName = {
-  professions: "professions",
+  professions: 'professions',
+  taxObjects: 'tax_objects',
+  katotg: 'katotg',
 };

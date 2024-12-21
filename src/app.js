@@ -1,12 +1,14 @@
-import express from "express";
-import morgan from "morgan";
-import cors from "cors";
-import "dotenv/config";
-import { swaggerDocs } from "./config/swaggerConfig.js";
-import professionsRouter from "./routes/professionsRouter.js";
-import { logError } from "./config/logError.js";
-import { serviceLogger } from "./config/logConfig.js";
-import { initializeDatabase } from "./services/dbServices/dbInit.js";
+import express from 'express';
+import morgan from 'morgan';
+import cors from 'cors';
+import 'dotenv/config';
+import { swaggerDocs } from './config/swaggerConfig.js';
+import professionsRouter from './routes/professionsRouter.js';
+import { logError } from './config/logError.js';
+import { serviceLogger } from './config/logConfig.js';
+import { initializeDatabase } from './services/dbServices/dbInit.js';
+import taxObjectsRouter from './routes/taxObjectsRouter.js';
+import katotgRouter from './routes/katotgRouter.js';
 
 const HTTP_PORT = process.env.PORT || 3344;
 const app = express();
@@ -16,33 +18,35 @@ const startServer = async () => {
   try {
     client = await initializeDatabase();
 
-    app.use(morgan("tiny"));
+    app.use(morgan('tiny'));
     app.use(
       cors({
-        origin: "*",
-        methods: "GET,POST,PUT,DELETE",
-        allowedHeaders: "Content-Type,Authorization",
+        origin: '*',
+        methods: 'GET,POST,PUT,DELETE',
+        allowedHeaders: 'Content-Type,Authorization',
       })
     );
     app.use(express.json());
 
     app.use(
-      "/info-service/",
+      '/info-service/',
       (req, res, next) => {
         req.client = client;
         next();
       },
-      professionsRouter
+      professionsRouter,
+      taxObjectsRouter,
+      katotgRouter
     );
 
     swaggerDocs(app, HTTP_PORT);
 
     app.use((_, res) => {
-      res.status(404).json({ message: "Route not found" });
+      res.status(404).json({ message: 'Route not found' });
     });
 
     app.use((err, req, res, next) => {
-      const { status = 500, message = "Server error" } = err;
+      const { status = 500, message = 'Server error' } = err;
       res.status(status).json({ message });
     });
 
@@ -53,20 +57,20 @@ const startServer = async () => {
       console.log(`HTTP Server is running. Use our API on port: ${HTTP_PORT}`);
     });
   } catch (error) {
-    logError(error, null, "Failed to start the server");
-    console.error("Failed to start the server", error);
+    logError(error, null, 'Failed to start the server');
+    console.error('Failed to start the server', error);
   }
 };
 
 startServer();
 
-process.on("SIGINT", async () => {
+process.on('SIGINT', async () => {
   try {
     await client.end();
-    console.log("PostgreSQL client disconnected gracefully");
+    console.log('PostgreSQL client disconnected gracefully');
     process.exit(0);
   } catch (error) {
-    console.error("Error during disconnection", error);
+    console.error('Error during disconnection', error);
     process.exit(1);
   }
 });

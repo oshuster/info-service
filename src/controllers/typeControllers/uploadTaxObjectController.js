@@ -1,13 +1,13 @@
 import { logError } from '../../config/logError.js';
-import { uploadProfessionService } from '../../services/profServices/uploadProfessionService.js';
+import { uploadTaxObjectService } from '../../services/taxObjectServices/uploadTaxObjectService.js';
 
-export const uploadProfController = async (req, res) => {
+export const uploadTaxObjectController = async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ message: 'Файл не надано' });
     }
 
-    uploadProfessionService(req.client, req.file);
+    uploadTaxObjectService(req.client, req.file);
 
     res.json({
       message:

@@ -1,7 +1,7 @@
-import { logError } from "../../config/logError.js";
-import "dotenv/config";
+import { logError } from '../../config/logError.js';
+import 'dotenv/config';
 
-const SCHEMA_NAME = process.env.SCHEMA_NAME || "prof_service";
+const SCHEMA_NAME = process.env.SCHEMA_NAME || 'info_service';
 
 export const searchProfessionService = async (client, query) => {
   try {
@@ -26,8 +26,8 @@ export const searchProfessionService = async (client, query) => {
 
     return formattedResults;
   } catch (error) {
-    console.error("Failed to search professions", error);
-    logError(error, null, "Failed to search professions");
-    throw new Error("Failed to search professions");
+    console.error('Failed to search professions', error);
+    logError(error, null, 'Failed to search professions');
+    throw new Error('Failed to search professions');
   }
 };

@@ -1,13 +1,13 @@
 import { logError } from '../../config/logError.js';
-import { uploadProfessionService } from '../../services/profServices/uploadProfessionService.js';
+import { uploadKatotgService } from '../../services/katotgServices/uploadKatotgService.js';
 
-export const uploadProfController = async (req, res) => {
+export const uploadKatotgController = async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ message: 'Файл не надано' });
     }
 
-    uploadProfessionService(req.client, req.file);
+    uploadKatotgService(req.client, req.file);
 
     res.json({
       message:
