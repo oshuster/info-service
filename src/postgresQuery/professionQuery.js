@@ -6,7 +6,9 @@ const createProfessionsTableQuery = `
       CREATE TABLE IF NOT EXISTS ${SCHEMA_NAME}.${tableName.professions} (
         id SERIAL PRIMARY KEY,
         code_kp TEXT NOT NULL,
-        name TEXT NOT NULL
+        name TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
       );
     `;
 
@@ -41,13 +43,43 @@ const clearQuery = `
         `;
 
 const insertQuery = `
-    INSERT INTO ${SCHEMA_NAME}.professions (code_kp, name)
+    INSERT INTO ${SCHEMA_NAME}.${tableName.professions} (code_kp, name)
     VALUES ($1, $2)
   `;
+
+const searchQuery = `
+      SELECT id, code_kp, name
+      FROM ${SCHEMA_NAME}.${tableName.professions}
+      WHERE code_kp ILIKE $1
+      OR name ILIKE $2
+    `;
+
+const updateQuery = `
+      UPDATE ${SCHEMA_NAME}.${tableName.professions}
+      SET code_kp = $1, name = $2
+      WHERE id = $3
+      RETURNING id, code_kp, name
+    `;
+
+const deleteQuery = `
+      DELETE FROM ${SCHEMA_NAME}.${tableName.professions}
+      WHERE id = $1
+      RETURNING id, code_kp, name
+    `;
+
+const createQuery = `
+      INSERT INTO ${SCHEMA_NAME}.${tableName.professions} (code_kp, name)
+      VALUES ($1, $2)
+      RETURNING id, code_kp, name
+    `;
 
 export const professionsQuery = {
   createProfessionsTableQuery,
   countDuplicatesQuery,
   clearQuery,
   insertQuery,
+  searchQuery,
+  updateQuery,
+  deleteQuery,
+  createQuery,
 };

@@ -1,18 +1,10 @@
 import { logError } from '../../config/logError.js';
 import 'dotenv/config';
-
-const SCHEMA_NAME = process.env.SCHEMA_NAME || 'info_service';
+import { professionsQuery } from '../../postgresQuery/professionQuery.js';
 
 export const searchProfessionService = async (client, query) => {
   try {
-    const searchQuery = `
-      SELECT id, code_kp, name
-      FROM ${SCHEMA_NAME}.professions
-      WHERE code_kp ILIKE $1
-      OR name ILIKE $2
-    `;
-
-    const results = await client.query(searchQuery, [
+    const results = await client.query(professionsQuery.searchQuery, [
       `%${query}%`,
       `%${query}%`,
     ]);

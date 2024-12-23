@@ -4,10 +4,8 @@ const { Client } = pkg;
 import HttpError from '../../helpers/HttpError.js';
 import { serviceLogger } from '../../config/logConfig.js';
 import { logError } from '../../config/logError.js';
-import { tableName } from '../../common/tablesName.js';
-import { professionsQuery } from '../../postgresQuery/professionQuery.js';
-import { taxObjectsQuery } from '../../postgresQuery/taxObjectsQuery.js';
-import { katotgQuery } from '../../postgresQuery/katotgQuery.js';
+import { generateTriggerQuery } from './generateTriggerQuery.js';
+import { tables } from '../../common/tables.js';
 
 const SCHEMA_NAME = process.env.SCHEMA_NAME || 'info-service';
 
@@ -27,40 +25,40 @@ export const initializeDatabase = async () => {
 
     // CREATE SCHEMA IF NOT EXISTS
     const createSchemaQuery = `CREATE SCHEMA IF NOT EXISTS ${SCHEMA_NAME};`;
-    serviceLogger.debug('Executing query: ', createSchemaQuery);
     await client.query(createSchemaQuery);
     serviceLogger.info(`Schema created successfully: ${SCHEMA_NAME}`);
 
-    // CREATING TABLES
-    // довідник професій
-    serviceLogger.debug(
-      'Executing query: ',
-      professionsQuery.createProfessionsTableQuery
-    );
-    await client.query(professionsQuery.createProfessionsTableQuery);
-    serviceLogger.info(
-      `Database table for ${tableName.professions} in schema ${SCHEMA_NAME} created successfully`
-    );
+    // CREATE TABLES
+    for (const table of tables) {
+      serviceLogger.debug(`Executing query: ${table.createQuery}`);
+      await client.query(table.createQuery);
+      serviceLogger.info(
+        `Database table for ${table.name} in schema ${SCHEMA_NAME} created successfully`
+      );
+    }
 
-    // Класифікатор обʼєктів оподаткування
-    serviceLogger.debug(
-      'Executing query: ',
-      taxObjectsQuery.createTaxObjectsTableQuery
-    );
-    await client.query(taxObjectsQuery.createTaxObjectsTableQuery);
-    serviceLogger.info(
-      `Database table for ${tableName.taxObjects} in schema ${SCHEMA_NAME} created successfully`
-    );
+    // CREATE UPDATE_AT FUNCTION
+    const createTriggerUpdatedAtQuery = `
+      CREATE OR REPLACE FUNCTION update_updated_at_column()
+      RETURNS TRIGGER AS $$
+      BEGIN
+          NEW.updated_at = CURRENT_TIMESTAMP;
+          RETURN NEW;
+      END;
+      $$ LANGUAGE plpgsql;
+    `;
+    await client.query(createTriggerUpdatedAtQuery);
+    serviceLogger.info(`Main trigger function created successfully`);
 
-    // КАТОТГ
-    serviceLogger.debug(
-      'Executing query: ',
-      katotgQuery.createKatotgTableQuery
-    );
-    await client.query(katotgQuery.createKatotgTableQuery);
-    serviceLogger.info(
-      `Database table for ${tableName.katotg} in schema ${SCHEMA_NAME} created successfully`
-    );
+    // CREATE TRIGGERS FOR EACH TABLE
+    for (const table of tables) {
+      const triggerQuery = generateTriggerQuery(table.name);
+      serviceLogger.debug(`Executing query: ${triggerQuery}`);
+      await client.query(triggerQuery);
+      serviceLogger.info(
+        `Trigger for ${table.name} in schema ${SCHEMA_NAME} created successfully`
+      );
+    }
 
     return client;
   } catch (error) {

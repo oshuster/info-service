@@ -8,7 +8,9 @@ const createKatotgTableQuery = `
         katotg TEXT NOT NULL,
         dps_name TEXT NOT NULL,
         adress TEXT NOT NULL,
-        dps_code TEXT NOT NULL
+        dps_code TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
       );
     `;
 
@@ -44,14 +46,40 @@ const clearQuery = `
           );
         `;
 
-const insertQuery = `
-    INSERT INTO ${SCHEMA_NAME}.${tableName.katotg} (katotg, dps_name, adress, dps_code)
-    VALUES ($1, $2, $3, $4)
-  `;
+const createQuery = `
+      INSERT INTO ${SCHEMA_NAME}.${tableName.katotg} (katotg, dps_name, adress, dps_code)
+      VALUES ($1, $2, $3, $4)
+      RETURNING id, katotg, dps_name, adress, dps_code
+    `;
+
+const deleteQuery = `
+      DELETE FROM ${SCHEMA_NAME}.${tableName.katotg}
+      WHERE id = $1
+      RETURNING id, katotg, dps_name, adress, dps_code
+    `;
+
+const updateQuery = `
+      UPDATE ${SCHEMA_NAME}.${tableName.katotg}
+      SET katotg = $2, dps_name = $3, adress = $4, dps_code = $5
+      WHERE id = $1
+      RETURNING id, katotg, dps_name, adress, dps_code
+    `;
+
+const searchQuery = `
+      SELECT id, katotg, dps_name, adress, dps_code
+      FROM ${SCHEMA_NAME}.${tableName.katotg}
+      WHERE katotg ILIKE $1
+      OR dps_name ILIKE $2
+      OR adress ILIKE $3
+      OR dps_code ILIKE $4
+    `;
 
 export const katotgQuery = {
   createKatotgTableQuery,
   countDuplicatesQuery,
   clearQuery,
-  insertQuery,
+  createQuery,
+  deleteQuery,
+  updateQuery,
+  searchQuery,
 };

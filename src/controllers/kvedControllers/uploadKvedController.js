@@ -1,13 +1,13 @@
 import { logError } from '../../config/logError.js';
-import { uploadTaxObjectService } from '../../services/taxObjectServices/uploadTaxObjectService.js';
+import { uploadKvedService } from '../../services/kvedServices/uploadKvedService.js';
 
-export const uploadTaxObjectController = async (req, res) => {
+export const uploadKvedController = async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ message: 'Файл не надано' });
     }
 
-    uploadTaxObjectService(req.client, req.file);
+    uploadKvedService(req.client, req.file);
 
     res.json({
       message:

@@ -6,7 +6,9 @@ const createTaxObjectsTableQuery = `
       CREATE TABLE IF NOT EXISTS ${SCHEMA_NAME}.${tableName.taxObjects} (
         id SERIAL PRIMARY KEY,
         type TEXT NOT NULL,
-        name TEXT NOT NULL
+        name TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
       );
     `;
 
@@ -45,9 +47,39 @@ const insertQuery = `
     VALUES ($1, $2)
   `;
 
+const searchQuery = `
+      SELECT id, type, name
+      FROM ${SCHEMA_NAME}.${tableName.taxObjects}
+      WHERE type ILIKE $1
+      OR name ILIKE $2
+    `;
+
+const updateQuery = `
+      UPDATE ${SCHEMA_NAME}.${tableName.taxObjects}
+      SET type = $1, name = $2
+      WHERE id = $3
+      RETURNING id, type, name
+    `;
+
+const deleteQuery = `
+      DELETE FROM ${SCHEMA_NAME}.${tableName.taxObjects}
+      WHERE id = $1
+      RETURNING id, type, name
+    `;
+
+const createQuery = `
+      INSERT INTO ${SCHEMA_NAME}.${tableName.taxObjects} (type, name)
+      VALUES ($1, $2)
+      RETURNING id, type, name
+    `;
+
 export const taxObjectsQuery = {
   createTaxObjectsTableQuery,
   countDuplicatesQuery,
   clearQuery,
   insertQuery,
+  searchQuery,
+  updateQuery,
+  deleteQuery,
+  createQuery,
 };

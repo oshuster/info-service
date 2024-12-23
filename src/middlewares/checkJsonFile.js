@@ -1,10 +1,10 @@
 import HttpError from '../helpers/HttpError.js';
 
-export const checkExcelFile = (req, res, next) => {
+export const checkJsonFile = (req, res, next) => {
   try {
     // Перевірка, чи файл взагалі був переданий
     if (!req.file) {
-      throw HttpError(400, 'Файл не передано');
+      throw HttpError(400, 'Missing file');
     }
 
     // Отримання MIME-типу та розширення
@@ -12,17 +12,14 @@ export const checkExcelFile = (req, res, next) => {
     const fileExtension = req.file.originalname.split('.').pop().toLowerCase();
 
     // Перевірка на допустимі MIME-типи та розширення
-    const validMimeTypes = [
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
-      'application/vnd.ms-excel', // .xls
-    ];
-    const validExtensions = ['xlsx', 'xls'];
+    const validMimeTypes = ['application/json'];
+    const validExtensions = ['json'];
 
     if (
       !validMimeTypes.includes(mimeType) ||
       !validExtensions.includes(fileExtension)
     ) {
-      throw HttpError(400, 'The file is not in Excel format (.xls or .xlsx)');
+      throw HttpError(400, 'The file is not in JSON format (.json)');
     }
 
     next();

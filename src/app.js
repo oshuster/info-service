@@ -9,6 +9,7 @@ import { serviceLogger } from './config/logConfig.js';
 import { initializeDatabase } from './services/dbServices/dbInit.js';
 import taxObjectsRouter from './routes/taxObjectsRouter.js';
 import katotgRouter from './routes/katotgRouter.js';
+import kvedRouter from './routes/kvedRouter.js';
 
 const HTTP_PORT = process.env.PORT || 3344;
 const app = express();
@@ -36,7 +37,8 @@ const startServer = async () => {
       },
       professionsRouter,
       taxObjectsRouter,
-      katotgRouter
+      katotgRouter,
+      kvedRouter
     );
 
     swaggerDocs(app, HTTP_PORT);

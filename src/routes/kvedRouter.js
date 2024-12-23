@@ -5,29 +5,30 @@ import { logRequest } from '../config/logConfig.js';
 import { searchTaxObjectController } from '../controllers/taxObjectControllers/searchTaxObjectController.js';
 import { addUuidMiddleware } from '../middlewares/addUuidMiddleware.js';
 import { upload } from '../middlewares/multerMiddleware.js';
-import { checkExcelFile } from '../middlewares/checkExcelFile.js';
 import { uploadTaxObjectController } from '../controllers/taxObjectControllers/uploadTaxObjectController.js';
+import { checkJsonFile } from '../middlewares/checkJsonFile.js';
+import { uploadKvedController } from '../controllers/kvedControllers/uploadKvedController.js';
 
-const taxObjectsRouter = express.Router();
+const kvedRouter = express.Router();
 
-taxObjectsRouter.use(addUuidMiddleware);
+kvedRouter.use(addUuidMiddleware);
 
-taxObjectsRouter.use(logRequest);
+kvedRouter.use(logRequest);
 
 /**
  * @swagger
  * tags:
- *   name: Tax-Objects
+ *   name: KVED
  *   description: Класифікатор обʼєктів оподаткування
  */
 
 /**
  * @swagger
- * /tax-objects/upload:
+ * /kved/upload:
  *   patch:
  *     summary: Редагування професії
  *     description: Оновлює професію за ID.
- *     tags: [Tax-Objects]
+ *     tags: [KVED]
  *     requestBody:
  *       required: true
  *       content:
@@ -49,11 +50,11 @@ taxObjectsRouter.use(logRequest);
  *         description: Внутрішня помилка сервера.
  */
 
-taxObjectsRouter.post(
-  '/tax-objects/upload',
+kvedRouter.post(
+  '/kved/upload',
   upload.single('file'),
-  checkExcelFile,
-  uploadTaxObjectController
+  checkJsonFile,
+  uploadKvedController
 );
 
 /**
@@ -62,7 +63,7 @@ taxObjectsRouter.post(
  *   patch:
  *     summary: Редагування професії
  *     description: Оновлює професію за ID.
- *     tags: [Tax-Objects]
+ *     tags: [KVED]
  *     requestBody:
  *       required: true
  *       content:
@@ -84,10 +85,10 @@ taxObjectsRouter.post(
  *         description: Внутрішня помилка сервера.
  */
 
-taxObjectsRouter.get(
-  '/tax-objects/search',
+kvedRouter.get(
+  '/kved/search',
   checkQueryParam(['q']),
   ctrlWrapper(searchTaxObjectController)
 );
 
-export default taxObjectsRouter;
+export default kvedRouter;

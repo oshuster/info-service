@@ -1,11 +1,11 @@
 import { logError } from '../../config/logError.js';
 import 'dotenv/config';
-import { professionsQuery } from '../../postgresQuery/professionQuery.js';
+import { katotgQuery } from '../../postgresQuery/katotgQuery.js';
 
-export const deleteProfessionService = async (client, id) => {
+export const deleteKatotgService = async (client, id) => {
   try {
     // Виконання запиту
-    const result = await client.query(professionsQuery.deleteQuery, [id]);
+    const result = await client.query(katotgQuery.deleteQuery, [id]);
 
     // Перевірка, чи було знайдено і видалено запис
     if (result.rowCount === 0) {

@@ -3,6 +3,6 @@
 // };
 
 export const cleanField = (value) => {
-  if (typeof value !== 'string') return value; // Повертаємо значення, якщо це не рядок
-  return value.replace(/^"|"$/g, '').trim(); // Видаляємо лапки на початку і в кінці, а також зайві пробіли
+  if (typeof value !== 'string') return value;
+  return value.replace(/^"|"$/g, '').trim();
 };

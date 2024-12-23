@@ -1,92 +1,92 @@
-import swaggerJsdoc from "swagger-jsdoc";
-import swaggerUi from "swagger-ui-express";
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 
 const options = {
   definition: {
-    openapi: "3.0.0",
+    openapi: '3.0.0',
     info: {
-      title: "Professions API",
-      version: "1.0.0",
+      title: 'Info-service Yatax API',
+      version: '1.0.0',
       description:
-        "API для пошуку, створення, редагування та видалення професій.",
+        'API для пошуку, створення, редагування та видалення професій.',
     },
     servers: [
       {
-        url: "http://localhost:3345/info-service/professions",
-        description: "Development server",
+        url: 'http://localhost:3345/info-service',
+        description: 'Development server',
       },
       {
-        url: "https://gdzapp.com/info-service/professions",
-        description: "Production server",
+        url: 'https://gdzapp.com/info-service',
+        description: 'Production server',
       },
     ],
     components: {
       schemas: {
         // Схема для пошуку професій
         ProfessionSearchRequest: {
-          type: "object",
+          type: 'object',
           properties: {
             query: {
-              type: "string",
-              description: "Пошуковий запит по назві або коду професії",
-              example: "інженер",
+              type: 'string',
+              description: 'Пошуковий запит по назві або коду професії',
+              example: 'інженер',
             },
           },
-          required: ["query"],
+          required: ['query'],
         },
         Profession: {
-          type: "object",
+          type: 'object',
           properties: {
             id: {
-              type: "integer",
-              description: "Унікальний ідентифікатор професії",
+              type: 'integer',
+              description: 'Унікальний ідентифікатор професії',
               example: 1,
             },
             code_kp: {
-              type: "string",
-              description: "Код класифікації професії",
-              example: "1234",
+              type: 'string',
+              description: 'Код класифікації професії',
+              example: '1234',
             },
             name: {
-              type: "string",
-              description: "Назва професії",
-              example: "Інженер",
+              type: 'string',
+              description: 'Назва професії',
+              example: 'Інженер',
             },
           },
         },
         EditProfession: {
-          type: "object",
+          type: 'object',
           properties: {
             id: {
-              type: "integer",
-              description: "Унікальний ідентифікатор професії",
+              type: 'integer',
+              description: 'Унікальний ідентифікатор професії',
               example: 1,
             },
             code_kp: {
-              type: "string",
-              description: "Код класифікації професії",
-              example: "1234",
+              type: 'string',
+              description: 'Код класифікації професії',
+              example: '1234',
             },
             name: {
-              type: "string",
-              description: "Назва професії",
-              example: "Інженер",
+              type: 'string',
+              description: 'Назва професії',
+              example: 'Інженер',
             },
           },
-          required: ["id", "code_kp", "name"],
+          required: ['id', 'code_kp', 'name'],
         },
       },
       responses: {
         ProfessionNotFound: {
-          description: "Професію не знайдено",
+          description: 'Професію не знайдено',
           content: {
-            "application/json": {
+            'application/json': {
               schema: {
-                type: "object",
+                type: 'object',
                 properties: {
                   message: {
-                    type: "string",
-                    example: "Професію не знайдено",
+                    type: 'string',
+                    example: 'Професію не знайдено',
                   },
                 },
               },
@@ -94,20 +94,20 @@ const options = {
           },
         },
         ValidationError: {
-          description: "Помилка валідації даних",
+          description: 'Помилка валідації даних',
           content: {
-            "application/json": {
+            'application/json': {
               schema: {
-                type: "object",
+                type: 'object',
                 properties: {
                   errors: {
-                    type: "array",
+                    type: 'array',
                     items: {
-                      type: "object",
+                      type: 'object',
                       properties: {
-                        field: { type: "string", example: "code_kp" },
+                        field: { type: 'string', example: 'code_kp' },
                         message: {
-                          type: "string",
+                          type: 'string',
                           example: "Поле 'code_kp' обов'язкове",
                         },
                       },
@@ -121,14 +121,14 @@ const options = {
       },
     },
   },
-  apis: ["./src/routes/*.js"],
+  apis: ['./src/routes/*.js'],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
 
 export const swaggerDocs = (app, port) => {
   app.use(
-    "/info-service/professions/swagger-docs",
+    '/info-service/swagger-docs',
     swaggerUi.serve,
     swaggerUi.setup(swaggerSpec)
   );

@@ -2,7 +2,7 @@ import { logError } from '../../config/logError.js';
 import 'dotenv/config';
 import { clearDuplicates } from '../dbServices/clearDublicates.js';
 import { professionsQuery } from '../../postgresQuery/professionQuery.js';
-import { parseAndInsertXlsx } from '../fileParserServices/xlsProfessionsParser.js';
+import { parseAndInsertXlsx } from '../fileParserServices/parseXlsx.js';
 import { tableName } from '../../common/tablesName.js';
 import { migrationLogger } from '../../config/logConfig.js';
 
