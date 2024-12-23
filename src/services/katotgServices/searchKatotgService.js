@@ -1,4 +1,4 @@
-import { katotgQuery } from '../../postgresQuery/katotgQuery';
+import { katotgQuery } from '../../postgresQuery/katotgQuery.js';
 
 export const searchKatotgService = async (client, query) => {
   try {

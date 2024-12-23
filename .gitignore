@@ -9,3 +9,4 @@ logs/
 inputFiles/katotg/*
 inputFiles/type/*
 *.sqlite
+/uploads/*

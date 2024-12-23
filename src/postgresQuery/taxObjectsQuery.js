@@ -6,7 +6,9 @@ const createTaxObjectsTableQuery = `
       CREATE TABLE IF NOT EXISTS ${SCHEMA_NAME}.${tableName.taxObjects} (
         id SERIAL PRIMARY KEY,
         type TEXT NOT NULL,
-        name TEXT NOT NULL
+        name TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
       );
     `;
 

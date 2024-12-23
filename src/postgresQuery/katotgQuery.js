@@ -8,7 +8,9 @@ const createKatotgTableQuery = `
         katotg TEXT NOT NULL,
         dps_name TEXT NOT NULL,
         adress TEXT NOT NULL,
-        dps_code TEXT NOT NULL
+        dps_code TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
       );
     `;
 

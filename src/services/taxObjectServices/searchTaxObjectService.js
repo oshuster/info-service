@@ -1,4 +1,4 @@
-import { taxObjectsQuery } from '../../postgresQuery/taxObjectsQuery';
+import { taxObjectsQuery } from '../../postgresQuery/taxObjectsQuery.js';
 
 export const searchTypeObjectService = async (client, query) => {
   try {

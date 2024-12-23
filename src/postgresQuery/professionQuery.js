@@ -6,7 +6,9 @@ const createProfessionsTableQuery = `
       CREATE TABLE IF NOT EXISTS ${SCHEMA_NAME}.${tableName.professions} (
         id SERIAL PRIMARY KEY,
         code_kp TEXT NOT NULL,
-        name TEXT NOT NULL
+        name TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
       );
     `;
 

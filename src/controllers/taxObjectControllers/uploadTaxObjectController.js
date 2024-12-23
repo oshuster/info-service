@@ -14,8 +14,10 @@ export const uploadTaxObjectController = async (req, res) => {
         'File uploaded successfully. Data will be updated within 1-15 minutes.',
     });
   } catch (error) {
-    console.error('Error loading file in profController:', error);
-    logError(error, req, 'Error loading file in profController');
-    res.status(500).json({ error: 'Error loading file in profController' });
+    console.error('Error loading file in TaxObjectController:', error);
+    logError(error, req, 'Error loading file in TaxObjectController');
+    res
+      .status(500)
+      .json({ error: 'Error loading file in TaxObjectController' });
   }
 };
