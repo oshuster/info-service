@@ -2,11 +2,11 @@ import express from 'express';
 import { checkQueryParam } from '../helpers/checkQueryParams.js';
 import { ctrlWrapper } from '../helpers/ctrlWrapper.js';
 import { logRequest } from '../config/logConfig.js';
-import { searchTaxObjectController } from '../controllers/typeControllers/searchTaxObjectController.js';
+import { searchTaxObjectController } from '../controllers/taxObjectControllers/searchTaxObjectController.js';
 import { addUuidMiddleware } from '../middlewares/addUuidMiddleware.js';
 import { upload } from '../middlewares/multerMiddleware.js';
 import { checkExcelFile } from '../middlewares/checkExcelFile.js';
-import { uploadTaxObjectController } from '../controllers/typeControllers/uploadTaxObjectController.js';
+import { uploadTaxObjectController } from '../controllers/taxObjectControllers/uploadTaxObjectController.js';
 
 const taxObjectsRouter = express.Router();
 

@@ -1,4 +1,4 @@
-import { searchTypes } from '../../services/taxObjectServices/searchTypes.js';
+import { searchTypes } from '../../services/taxObjectServices/searchTaxObjectService.js';
 
 export const searchTaxObjectController = async (req, res) => {
   try {
