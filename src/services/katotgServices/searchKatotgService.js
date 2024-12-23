@@ -1,4 +1,4 @@
-export const searchKatotg = async (db, query) => {
+export const searchKatotgService = async (db, query) => {
   try {
     const normalizedQuery = query.toUpperCase();
 
@@ -29,7 +29,7 @@ export const searchKatotg = async (db, query) => {
 
     return formattedResults;
   } catch (error) {
-    console.error("Failed to search katotg", error);
-    throw new Error("Failed to search katotg");
+    console.error('Failed to search katotg', error);
+    throw new Error('Failed to search katotg');
   }
 };

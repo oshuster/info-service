@@ -4,8 +4,6 @@ import { professionsQuery } from '../../postgresQuery/professionQuery.js';
 
 export const createProfessionService = async (client, professionData) => {
   try {
-    // SQL-запит для вставки нового ітема
-
     // Виконання запиту
     const result = await client.query(professionsQuery.createQuery, [
       professionData.code_kp,

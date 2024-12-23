@@ -2,11 +2,11 @@ import express from 'express';
 import { logRequest } from '../config/logConfig.js';
 import { checkQueryParam } from '../helpers/checkQueryParams.js';
 import { ctrlWrapper } from '../helpers/ctrlWrapper.js';
-import { katotgController } from '../controllers/katotgControllers/katotgController.js';
 import { addUuidMiddleware } from '../middlewares/addUuidMiddleware.js';
 import { upload } from '../middlewares/multerMiddleware.js';
 import { checkExcelFile } from '../middlewares/checkExcelFile.js';
 import { uploadKatotgController } from '../controllers/katotgControllers/uploadKatotgController.js';
+import { searchKatotgController } from '../controllers/katotgControllers/searchKatotgController.js';
 
 const katotgRouter = express.Router();
 
@@ -60,7 +60,7 @@ katotgRouter.post(
 katotgRouter.get(
   '/katotg/search',
   checkQueryParam(['q']),
-  ctrlWrapper(katotgController)
+  ctrlWrapper(searchKatotgController)
 );
 
 export default katotgRouter;
