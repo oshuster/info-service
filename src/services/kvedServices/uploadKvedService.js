@@ -24,7 +24,8 @@ export const uploadKvedService = async (client, file) => {
     const data = await fs.readFile(filePath, { encoding: 'utf8' });
     const jsonData = JSON.parse(data);
 
-    serviceLogger.debug(`File content: ${JSON.stringify(jsonData, null, 2)}`);
+    // serviceLogger.debug(`File content: ${JSON.stringify(jsonData, null, 2)}`);
+    serviceLogger.debug(`Items count: ${jsonData?.kved.length}`);
 
     // Перевірка наявності ключа `kved` і даних
     if (!jsonData.kved || jsonData.kved.length === 0) {
@@ -36,7 +37,7 @@ export const uploadKvedService = async (client, file) => {
       const { Code, Name, Description, Info } = jsonData.kved[index];
 
       // Перевірка наявності необхідних даних
-      if (!Code || !Name || !Description || !Info) {
+      if (!Code || !Name || !Description) {
         migrationLogger.warn(
           `Skipping row ${index + 1} due to missing data: ${JSON.stringify(
             jsonData.kved[index]
