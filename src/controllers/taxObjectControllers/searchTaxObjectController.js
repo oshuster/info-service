@@ -1,8 +1,8 @@
-import { searchTypes } from '../../services/taxObjectServices/searchTaxObjectService.js';
+import { searchTypeObjectService } from '../../services/taxObjectServices/searchTaxObjectService.js';
 
 export const searchTaxObjectController = async (req, res) => {
   try {
-    const result = await searchTypes(req.db, req.query.q);
+    const result = await searchTypeObjectService(req.db, req.query.q);
 
     res.json(result);
   } catch (error) {

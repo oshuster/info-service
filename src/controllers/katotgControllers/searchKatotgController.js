@@ -1,4 +1,4 @@
-import { searchKatotgService } from '../../services/katotgServices/searchKatotgService';
+import { searchKatotgService } from '../../services/katotgServices/searchKatotgService.js';
 
 export const searchKatotgController = async (req, res) => {
   try {
