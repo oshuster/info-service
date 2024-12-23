@@ -27,7 +27,7 @@ taxObjectsRouter.use(logRequest);
  *   patch:
  *     summary: Редагування професії
  *     description: Оновлює професію за ID.
- *     tags: [Professions]
+ *     tags: [Tax-Objects]
  *     requestBody:
  *       required: true
  *       content:
@@ -62,7 +62,7 @@ taxObjectsRouter.post(
  *   patch:
  *     summary: Редагування професії
  *     description: Оновлює професію за ID.
- *     tags: [Professions]
+ *     tags: [Tax-Objects]
  *     requestBody:
  *       required: true
  *       content:

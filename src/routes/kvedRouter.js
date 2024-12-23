@@ -28,7 +28,7 @@ kvedRouter.use(logRequest);
  *   patch:
  *     summary: Редагування професії
  *     description: Оновлює професію за ID.
- *     tags: [Professions]
+ *     tags: [KVED]
  *     requestBody:
  *       required: true
  *       content:
@@ -63,7 +63,7 @@ kvedRouter.post(
  *   patch:
  *     summary: Редагування професії
  *     description: Оновлює професію за ID.
- *     tags: [Professions]
+ *     tags: [KVED]
  *     requestBody:
  *       required: true
  *       content:

@@ -3,8 +3,6 @@ import { logRequest } from '../config/logConfig.js';
 import { checkQueryParam } from '../helpers/checkQueryParams.js';
 import { ctrlWrapper } from '../helpers/ctrlWrapper.js';
 import { addUuidMiddleware } from '../middlewares/addUuidMiddleware.js';
-import { editProfessionSchema } from '../schemas/editSchema.js';
-import { createProfessionSchema } from '../schemas/createSchema.js';
 import { validateRequest } from '../middlewares/validateProfession.js';
 import { editProfController } from '../controllers/professionsControlers/editProfController.js';
 import { profController } from '../controllers/professionsControlers/searchProfController.js';
@@ -13,6 +11,8 @@ import { deleteProfController } from '../controllers/professionsControlers/delet
 import { uploadProfController } from '../controllers/professionsControlers/uploadProfController.js';
 import { upload } from '../middlewares/multerMiddleware.js';
 import { checkExcelFile } from '../middlewares/checkExcelFile.js';
+import { createProfessionSchema } from '../schemas/professions/createSchema.js';
+import { editProfessionSchema } from '../schemas/professions/editSchema.js';
 
 const professionsRouter = express.Router();
 
@@ -49,7 +49,7 @@ professionsRouter.use(logRequest);
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Profession'
+ *                 $ref: '#/components/schemas/professions/Profession'
  *       400:
  *         description: Помилка валідації даних.
  *       500:
@@ -74,7 +74,7 @@ professionsRouter.get(
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Profession'
+ *             $ref: '#/components/schemas/professions/Profession'
  *     responses:
  *       201:
  *         description: Професія успішно створена.
@@ -114,7 +114,7 @@ professionsRouter.post(
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Profession'
+ *               $ref: '#/components/schemas/professions/Profession'
  *       404:
  *         description: Професія не знайдена.
  *       500:
@@ -139,14 +139,14 @@ professionsRouter.delete(
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/EditProfession'
+ *             $ref: '#/components/schemas/professions/EditProfession'
  *     responses:
  *       200:
  *         description: Професія успішно оновлена.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Profession'
+ *               $ref: '#/components/schemas/professions/Profession'
  *       400:
  *         description: Помилка валідації даних.
  *       404:
@@ -173,7 +173,7 @@ professionsRouter.patch(
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/EditProfession'
+ *             $ref: '#/components/schemas/professions/EditProfession'
  *     responses:
  *       200:
  *         description: Професія успішно оновлена.

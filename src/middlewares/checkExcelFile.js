@@ -25,8 +25,8 @@ export const checkExcelFile = (req, res, next) => {
       throw HttpError(400, 'The file is not in Excel format (.xls or .xlsx)');
     }
 
-    next(); // Якщо перевірка пройдена, передаємо управління далі
+    next();
   } catch (error) {
-    next(error); // Передаємо помилку в обробник
+    next(error);
   }
 };

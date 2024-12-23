@@ -18,7 +18,7 @@ katotgRouter.use(logRequest);
 /**
  * @swagger
  * tags:
- *   name: Tax-Objects
+ *   name: KATOTG
  *   description: Класифікатор обʼєктів оподаткування
  */
 
@@ -28,7 +28,7 @@ katotgRouter.use(logRequest);
  *   patch:
  *     summary: Редагування професії
  *     description: Оновлює професію за ID.
- *     tags: [Professions]
+ *     tags: [KATOTG]
  *     requestBody:
  *       required: true
  *       content:
