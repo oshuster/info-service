@@ -1,19 +1,13 @@
 import { logError } from '../../config/logError.js';
 import 'dotenv/config';
-
-const SCHEMA_NAME = process.env.SCHEMA_NAME || 'info_service';
+import { professionsQuery } from '../../postgresQuery/professionQuery.js';
 
 export const createProfessionService = async (client, professionData) => {
   try {
     // SQL-запит для вставки нового ітема
-    const insertQuery = `
-      INSERT INTO ${SCHEMA_NAME}.professions (code_kp, name)
-      VALUES ($1, $2)
-      RETURNING id, code_kp, name
-    `;
 
     // Виконання запиту
-    const result = await client.query(insertQuery, [
+    const result = await client.query(professionsQuery.createQuery, [
       professionData.code_kp,
       professionData.name,
     ]);

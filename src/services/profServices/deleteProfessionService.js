@@ -1,19 +1,11 @@
 import { logError } from '../../config/logError.js';
 import 'dotenv/config';
-
-const SCHEMA_NAME = process.env.SCHEMA_NAME || 'info_service';
+import { professionsQuery } from '../../postgresQuery/professionQuery.js';
 
 export const deleteProfessionService = async (client, id) => {
   try {
-    // SQL-запит для видалення ітема за ID
-    const deleteQuery = `
-      DELETE FROM ${SCHEMA_NAME}.professions
-      WHERE id = $1
-      RETURNING id, code_kp, name
-    `;
-
     // Виконання запиту
-    const result = await client.query(deleteQuery, [id]);
+    const result = await client.query(professionsQuery.deleteQuery, [id]);
 
     // Перевірка, чи було знайдено і видалено запис
     if (result.rowCount === 0) {
