@@ -1,22 +1,13 @@
-export const searchKatotgService = async (db, query) => {
+import { katotgQuery } from '../../postgresQuery/katotgQuery';
+
+export const searchKatotgService = async (client, query) => {
   try {
-    const normalizedQuery = query.toUpperCase();
-
-    const searchQuery = `
-      SELECT id, katotg, dps_name, adress, dps_code
-      FROM katotg
-      WHERE dps_name LIKE ? COLLATE NOCASE
-      OR dps_code LIKE ? COLLATE NOCASE
-      OR adress LIKE ? COLLATE NOCASE
-    `;
-
-    const results = db
-      .prepare(searchQuery)
-      .all(
-        `%${normalizedQuery}%`,
-        `%${normalizedQuery}%`,
-        `%${normalizedQuery}%`
-      );
+    const results = await client.query(katotgQuery.searchQuery, [
+      `%${query}%`,
+      `%${query}%`,
+      `%${query}%`,
+      `%${query}%`,
+    ]);
 
     // [{id:id, katotg:katotg, dps_name:dps_name, adress:adress, dps_code:dps_code}]
     const formattedResults = results.map((row) => ({

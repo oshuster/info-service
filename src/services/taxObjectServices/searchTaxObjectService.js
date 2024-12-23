@@ -1,6 +1,6 @@
 import { taxObjectsQuery } from '../../postgresQuery/taxObjectsQuery';
 
-export const searchTypes = async (client, query) => {
+export const searchTypeObjectService = async (client, query) => {
   try {
     const results = await client.query(taxObjectsQuery.searchQuery, [
       `%${query}%`,
