@@ -1,6 +1,6 @@
 import express from 'express';
 import { logRequest } from '../config/logConfig.js';
-import { checkQueryParam } from '../helpers/checkQueryParams.js';
+import { checkQueryParam } from '../middlewares/checkQueryParams.js';
 import { ctrlWrapper } from '../helpers/ctrlWrapper.js';
 import { addUuidMiddleware } from '../middlewares/addUuidMiddleware.js';
 import { upload } from '../middlewares/multerMiddleware.js';
