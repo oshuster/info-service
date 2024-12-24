@@ -46,7 +46,7 @@ const clearQuery = `
           );
         `;
 
-const createQuery = `
+const insertQuery = `
       INSERT INTO ${SCHEMA_NAME}.${tableName.katotg} (katotg, dps_name, adress, dps_code)
       VALUES ($1, $2, $3, $4)
       RETURNING id, katotg, dps_name, adress, dps_code
@@ -78,7 +78,7 @@ export const katotgQuery = {
   createKatotgTableQuery,
   countDuplicatesQuery,
   clearQuery,
-  createQuery,
+  insertQuery,
   deleteQuery,
   updateQuery,
   searchQuery,
