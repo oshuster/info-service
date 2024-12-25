@@ -31,7 +31,7 @@ professionsRouter.use(logRequest);
 
 /**
  * @swagger
- * /search:
+ * /professions/search:
  *   get:
  *     summary: Пошук професій
  *     description: Повертає список професій на основі запиту.
@@ -43,6 +43,7 @@ professionsRouter.use(logRequest);
  *           type: string
  *         required: true
  *         description: Пошуковий запит для назви або коду професії
+ *         example: "інженер"
  *     responses:
  *       200:
  *         description: Успішний запит. Повертається список професій.
@@ -53,20 +54,16 @@ professionsRouter.use(logRequest);
  *               items:
  *                 $ref: '#/components/schemas/professions/Profession'
  *       400:
- *         description: Помилка валідації даних.
+ *         $ref: '#/components/responses/ValidationError'
  *       500:
  *         description: Внутрішня помилка сервера.
  */
 
-professionsRouter.get(
-  '/search',
-  checkQueryParam(['q']),
-  ctrlWrapper(profController)
-);
+professionsRouter.get('/search', checkQueryParam(['q']), profController);
 
 /**
  * @swagger
- * /create:
+ * /professions/create:
  *   post:
  *     summary: Додавання професії
  *     description: Додає нову професію в список.
@@ -77,6 +74,9 @@ professionsRouter.get(
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/professions/Profession'
+ *           example:
+ *             code_kp: "1234"
+ *             name: "Інженер"
  *     responses:
  *       201:
  *         description: Професія успішно створена.
@@ -85,7 +85,7 @@ professionsRouter.get(
  *             schema:
  *               $ref: '#/components/schemas/Profession'
  *       400:
- *         description: Помилка валідації даних.
+ *         $ref: '#/components/responses/ValidationError'
  *       500:
  *         description: Внутрішня помилка сервера.
  */
@@ -93,12 +93,12 @@ professionsRouter.get(
 professionsRouter.post(
   '/create',
   validateRequest(createProfessionSchema),
-  ctrlWrapper(createProfController)
+  createProfController
 );
 
 /**
  * @swagger
- * /delete:
+ * /professions/delete:
  *   delete:
  *     summary: Видалення професії
  *     description: Видаляє професію за ID.
@@ -110,15 +110,16 @@ professionsRouter.post(
  *           type: string
  *         required: true
  *         description: ID професії для видалення
+ *         example: "1"
  *     responses:
  *       200:
  *         description: Професія успішно видалена.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/professions/Profession'
+ *               $ref: '#/components/schemas/Profession'
  *       404:
- *         description: Професія не знайдена.
+ *         $ref: '#/components/responses/ProfessionNotFound'
  *       500:
  *         description: Внутрішня помилка сервера.
  */
@@ -127,12 +128,12 @@ professionsRouter.delete(
   '/delete',
   checkQueryParam(['id']),
   checkForRegexp(IDregexp, 'id'),
-  ctrlWrapper(deleteProfController)
+  deleteProfController
 );
 
 /**
  * @swagger
- * /edit:
+ * /professions/edit:
  *   patch:
  *     summary: Редагування професії
  *     description: Оновлює професію за ID.
@@ -142,41 +143,7 @@ professionsRouter.delete(
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/professions/EditProfession'
- *     responses:
- *       200:
- *         description: Професія успішно оновлена.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/professions/Profession'
- *       400:
- *         description: Помилка валідації даних.
- *       404:
- *         description: Професія не знайдена.
- *       500:
- *         description: Внутрішня помилка сервера.
- */
-
-professionsRouter.patch(
-  '/edit',
-  validateRequest(editProfessionSchema),
-  ctrlWrapper(editProfController)
-);
-
-/**
- * @swagger
- * /upload:
- *   patch:
- *     summary: Редагування професії
- *     description: Оновлює професію за ID.
- *     tags: [Professions]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/professions/EditProfession'
+ *             $ref: '#/components/schemas/Profession'
  *     responses:
  *       200:
  *         description: Професія успішно оновлена.
@@ -190,6 +157,39 @@ professionsRouter.patch(
  *         description: Професія не знайдена.
  *       500:
  *         description: Внутрішня помилка сервера.
+ */
+
+professionsRouter.patch(
+  '/edit',
+  validateRequest(editProfessionSchema),
+  editProfController
+);
+
+/**
+ * @swagger
+ * /professions/upload:
+ *   post:
+ *     summary: Завантаження Excel файлу професій
+ *     description: Завантажує Excel файл для масового додавання професій.
+ *     tags: [Professions]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *                 description: Excel файл для завантаження
+ *     responses:
+ *       200:
+ *         description: File uploaded successfully. Data will be updated within 1-15 minutes.
+ *       400:
+ *        description: The file is not in Excel format (.xls or .xlsx)
+ *       500:
+ *         description: Error loading file in profController.
  */
 
 professionsRouter.post(

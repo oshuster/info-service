@@ -9,7 +9,7 @@ export const deleteKatotgController = async (req, res) => {
     if (!result) {
       return res
         .status(404)
-        .json({ message: `Profession with ID ${req.query.id} not found` });
+        .json({ message: `Katotg with ID ${req.query.id} not found` });
     }
 
     res.json(result);

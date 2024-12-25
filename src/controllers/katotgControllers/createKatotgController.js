@@ -5,7 +5,7 @@ export const createKatotgController = async (req, res) => {
   try {
     const result = await createKatotgService(req.client, req.body);
 
-    res.json(result);
+    res.status(201).json(result);
   } catch (error) {
     console.error('Error in KatotgController:', error);
     logError(error, req, 'Error in KatotgController');

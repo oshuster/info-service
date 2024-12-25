@@ -4,7 +4,7 @@ import { uploadKatotgService } from '../../services/katotgServices/uploadKatotgS
 export const uploadKatotgController = async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ message: 'Файл не надано' });
+      return res.status(400).json({ message: 'File is missing' });
     }
 
     uploadKatotgService(req.client, req.file);

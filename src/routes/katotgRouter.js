@@ -27,33 +27,32 @@ katotgRouter.use(logRequest);
  * @swagger
  * tags:
  *   name: KATOTG
- *   description: Класифікатор обʼєктів оподаткування
+ *   description: Довідник КАТОТТГ
  */
 
 /**
  * @swagger
  * /katotg/upload:
- *   patch:
- *     summary: Редагування професії
- *     description: Оновлює професію за ID.
+ *   post:
+ *     summary: Завантаження Excel-файлу
+ *     description: Завантажує Excel-файл для масового додавання обʼєктів оподаткування.
  *     tags: [KATOTG]
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/EditProfession'
+ *             type: object
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *                 description: Excel-файл для завантаження
  *     responses:
  *       200:
- *         description: Професія успішно оновлена.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Profession'
+ *         description: File uploaded successfully. Data will be updated within 1-15 minutes.
  *       400:
- *         description: Помилка валідації даних.
- *       404:
- *         description: Професія не знайдена.
+ *         description: File is missing
  *       500:
  *         description: Внутрішня помилка сервера.
  */
@@ -68,27 +67,29 @@ katotgRouter.post(
 /**
  * @swagger
  * /katotg/search:
- *   patch:
+ *   get:
  *     summary: Пошук КАТОТГ
- *     description: Пошук КАТОТГ за ключовим словом.
+ *     description: Пошук обʼєктів оподаткування за ключовими словами.
  *     tags: [KATOTG]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/katotg/EditProfession'
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Ключове слово для пошуку
+ *         example: "Київ"
  *     responses:
  *       200:
- *         description: Професія успішно оновлена.
+ *         description: Успішний пошук. Повертається список обʼєктів.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Profession'
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Katotg'
  *       400:
- *         description: Помилка валідації даних.
- *       404:
- *         description: Професія не знайдена.
+ *         $ref: '#/components/responses/ValidationKatotgError'
  *       500:
  *         description: Внутрішня помилка сервера.
  */
@@ -99,24 +100,29 @@ katotgRouter.get('/search', checkQueryParam(['q']), searchKatotgController);
  * @swagger
  * /katotg/create:
  *   post:
- *     summary: Додавання КАТОТГ
- *     description: Додає новий КАТОТГ в список.
+ *     summary: Додавання обʼєкту оподаткування
+ *     description: Додає новий обʼєкт оподаткування в базу даних.
  *     tags: [KATOTG]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/taxObjects/Profession'
+ *             $ref: '#/components/schemas/Katotg'
+ *           example:
+ *             katotg: "UA05120090012345678"
+ *             dps_name: "ФЛОРІАНІВКА"
+ *             adress: "село Флоріанівка Вінницька обл. Хмільницький район"
+ *             dps_code: "456"
  *     responses:
  *       201:
- *         description: Обʼєкт оподаткування успішно створена.
+ *         description: Обʼєкт успішно створено.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Profession'
+ *               $ref: '#/components/schemas/Katotg'
  *       400:
- *         description: Помилка валідації даних.
+ *         $ref: '#/components/responses/ValidationKatotgError'
  *       500:
  *         description: Внутрішня помилка сервера.
  */
@@ -131,26 +137,32 @@ katotgRouter.post(
  * @swagger
  * /katotg/edit:
  *   patch:
- *     summary: Редагування КАТОТГ
- *     description: Оновлює КАТОТГ за ID.
+ *     summary: Редагування обʼєкту оподаткування
+ *     description: Оновлює існуючий обʼєкт оподаткування за ID.
  *     tags: [KATOTG]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Tax/EditProfession'
+ *             $ref: '#/components/schemas/Katotg'
+ *           example:
+ *             id: 1
+ *             katotg: "UA05120090012345678"
+ *             dps_name: "ФЛОРІАНІВКА"
+ *             adress: "село Флоріанівка Вінницька обл. Хмільницький район"
+ *             dps_code: "456"
  *     responses:
  *       200:
- *         description: Професія успішно оновлена.
+ *         description: Обʼєкт успішно оновлено.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/professions/Profession'
+ *               $ref: '#/components/schemas/Katotg'
  *       400:
- *         description: Помилка валідації даних.
+ *         $ref: '#/components/responses/ValidationKatotgError'
  *       404:
- *         description: Професія не знайдена.
+ *         $ref: '#/components/responses/ObjectNotFound'
  *       500:
  *         description: Внутрішня помилка сервера.
  */
@@ -165,8 +177,8 @@ katotgRouter.patch(
  * @swagger
  * /katotg/delete:
  *   delete:
- *     summary: Видалення КАТОТГ
- *     description: Видаляє КАТОТГ за ID.
+ *     summary: Видалення обʼєкту оподаткування
+ *     description: Видаляє обʼєкт оподаткування за ID.
  *     tags: [KATOTG]
  *     parameters:
  *       - in: query
@@ -175,15 +187,12 @@ katotgRouter.patch(
  *           type: string
  *         required: true
  *         description: ID обʼєкту оподаткування для видалення
+ *         example: "1"
  *     responses:
  *       200:
- *         description: Обʼєкт оподаткування успішно видалено.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/professions/Profession'
+ *         description: Обʼєкт успішно видалено.
  *       404:
- *         description: Професія не знайдена.
+ *         $ref: '#/components/responses/ObjectNotFound'
  *       500:
  *         description: Внутрішня помилка сервера.
  */

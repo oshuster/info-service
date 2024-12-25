@@ -27,33 +27,32 @@ kvedRouter.use(logRequest);
  * @swagger
  * tags:
  *   name: KVED
- *   description: Класифікатор обʼєктів оподаткування
+ *   description: API для роботи з КВЕД (класифікатор видів економічної діяльності)
  */
 
 /**
  * @swagger
  * /kved/upload:
- *   patch:
- *     summary: Редагування професії
- *     description: Оновлює професію за ID.
+ *   post:
+ *     summary: Завантаження JSON-файлу КВЕД
+ *     description: Завантажує JSON-файл для масового додавання КВЕД.
  *     tags: [KVED]
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/EditProfession'
+ *             type: object
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *                 description: JSON-файл для завантаження
  *     responses:
  *       200:
- *         description: Професія успішно оновлена.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Profession'
+ *         description: File uploaded successfully. Data will be updated within 1-15 minutes.
  *       400:
- *         description: Помилка валідації даних.
- *       404:
- *         description: Професія не знайдена.
+ *         $ref: '#/components/responses/ValidationError'
  *       500:
  *         description: Внутрішня помилка сервера.
  */
