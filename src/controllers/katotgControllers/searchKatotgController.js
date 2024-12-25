@@ -2,7 +2,7 @@ import { searchKatotgService } from '../../services/katotgServices/searchKatotgS
 
 export const searchKatotgController = async (req, res) => {
   try {
-    const result = await searchKatotgService(req.db, req.query.q);
+    const result = await searchKatotgService(req.client, req.query.q);
 
     res.json(result);
   } catch (error) {

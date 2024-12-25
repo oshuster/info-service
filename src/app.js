@@ -23,23 +23,21 @@ const startServer = async () => {
     app.use(
       cors({
         origin: '*',
-        methods: 'GET,POST,PUT,DELETE',
+        methods: 'GET,POST,PUT,DELETE, PATCH',
         allowedHeaders: 'Content-Type,Authorization',
       })
     );
     app.use(express.json());
 
-    app.use(
-      '/info-service/',
-      (req, res, next) => {
-        req.client = client;
-        next();
-      },
-      professionsRouter,
-      taxObjectsRouter,
-      katotgRouter,
-      kvedRouter
-    );
+    app.use('/info-service/', (req, res, next) => {
+      req.client = client;
+      next();
+    });
+
+    app.use('/info-service/professions', professionsRouter);
+    app.use('/info-service/tax-objects', taxObjectsRouter);
+    app.use('/info-service/katotg', katotgRouter);
+    app.use('/info-service/kved', kvedRouter);
 
     swaggerDocs(app, HTTP_PORT);
 

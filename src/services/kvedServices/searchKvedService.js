@@ -10,7 +10,7 @@ export const searchKvedService = async (client, query) => {
     ]);
 
     // [{code, name, description, info}]
-    const formattedResults = results.map((row) => ({
+    const formattedResults = results.rows.map((row) => ({
       id: row.id,
       code: row.code,
       name: row.name,

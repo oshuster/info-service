@@ -10,7 +10,7 @@ export const searchKatotgService = async (client, query) => {
     ]);
 
     // [{id:id, katotg:katotg, dps_name:dps_name, adress:adress, dps_code:dps_code}]
-    const formattedResults = results.map((row) => ({
+    const formattedResults = results.rows.map((row) => ({
       id: row.id,
       katotg: row.katotg,
       dps_name: row.dps_name,

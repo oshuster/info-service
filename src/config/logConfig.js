@@ -1,8 +1,8 @@
-import winston from "winston";
-import "dotenv/config";
-import DailyRotateFile from "winston-daily-rotate-file";
+import winston from 'winston';
+import 'dotenv/config';
+import DailyRotateFile from 'winston-daily-rotate-file';
 
-const LEVEL = process.env.LOG_LEVEL || "info";
+const LEVEL = process.env.LOG_LEVEL || 'info';
 
 // Налаштування форматів логування
 const { combine, timestamp, printf } = winston.format;
@@ -16,9 +16,9 @@ const serviceLogger = winston.createLogger({
   format: combine(timestamp(), myFormat),
   transports: [
     new DailyRotateFile({
-      filename: "./logs/%DATE%-service.log",
-      datePattern: "YYYY-MM-DD",
-      maxFiles: "5d",
+      filename: './logs/%DATE%-service.log',
+      datePattern: 'YYYY-MM-DD',
+      maxFiles: '5d',
       maxSize: 10000000,
     }),
   ],
@@ -30,9 +30,9 @@ const webLogger = winston.createLogger({
   format: combine(timestamp(), myFormat),
   transports: [
     new DailyRotateFile({
-      filename: "./logs/%DATE%-web.log",
-      datePattern: "YYYY-MM-DD",
-      maxFiles: "5d",
+      filename: './logs/%DATE%-web.log',
+      datePattern: 'YYYY-MM-DD',
+      maxFiles: '5d',
       maxSize: 10000000,
     }),
   ],
@@ -62,9 +62,9 @@ const migrationLogger = winston.createLogger({
   format: combine(timestamp(), myFormat),
   transports: [
     new DailyRotateFile({
-      filename: "./logs/%DATE%-migration.log",
-      datePattern: "YYYY-MM-DD",
-      maxFiles: "5d",
+      filename: './logs/%DATE%-migration.log',
+      datePattern: 'YYYY-MM-DD',
+      maxFiles: '5d',
     }),
   ],
 });

@@ -6,14 +6,14 @@ export const createTaxObjectService = async (client, TaxObjectData) => {
   try {
     // Виконання запиту
     const result = await client.query(taxObjectsQuery.createQuery, [
-      TaxObjectData.code_kp,
+      TaxObjectData.type,
       TaxObjectData.name,
     ]);
 
     // Повернення створеного ітема
     return {
       id: result.rows[0].id,
-      code_kp: result.rows[0].type,
+      type: result.rows[0].type,
       name: result.rows[0].name,
     };
   } catch (error) {

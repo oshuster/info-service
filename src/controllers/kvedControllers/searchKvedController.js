@@ -2,7 +2,7 @@ import { searchKvedService } from '../../services/kvedServices/searchKvedService
 
 export const searchKvedController = async (req, res) => {
   try {
-    const result = await searchKvedService(req.db, req.query.q);
+    const result = await searchKvedService(req.client, req.query.q);
 
     res.json(result);
   } catch (error) {

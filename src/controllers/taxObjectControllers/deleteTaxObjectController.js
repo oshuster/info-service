@@ -1,22 +1,20 @@
 import { logError } from '../../config/logError.js';
-import { deleteProfessionService } from '../../services/profServices/deleteProfessionService.js';
+import { deleteTaxObjectService } from '../../services/taxObjectServices/deleteTaxObjectService.js';
 
 export const deleteTaxObjectController = async (req, res) => {
   try {
-    const result = await deleteProfessionService(req.client, req.query.id);
+    const result = await deleteTaxObjectService(req.client, req.query.id);
 
     if (!result) {
       return res
         .status(404)
-        .json({ message: `Profession with ID ${req.query.id} not found` });
+        .json({ message: `Tax object with ID ${req.query.id} not found` });
     }
 
     res.json(result);
   } catch (error) {
-    console.error('Error in deleteProfController:', error);
-    logError(error, req, 'Error in deleteProfController');
-    res
-      .status(500)
-      .json({ error: 'Failed to delete in classifier of professions' });
+    console.error('Error in deleteTaxObjectController:', error);
+    logError(error, req, 'Error in deleteTaxObjectController');
+    res.status(500).json({ error: 'Failed to delete tax object' });
   }
 };

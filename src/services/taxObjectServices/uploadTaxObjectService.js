@@ -8,6 +8,7 @@ import { migrationLogger } from '../../config/logConfig.js';
 import { taxObjectsQuery } from '../../postgresQuery/taxObjectsQuery.js';
 
 export const uploadTaxObjectService = async (client, file) => {
+  console.log('uploadTaxObjectService called');
   try {
     const queries = {
       count: taxObjectsQuery.countDuplicatesQuery,

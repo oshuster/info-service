@@ -15,8 +15,8 @@ export const deleteTaxObjectService = async (client, id) => {
     // Повернення даних видаленого ітема
     return result.rows[0];
   } catch (error) {
-    console.error('Failed to delete profession', error);
-    logError(error, null, 'Failed to delete profession');
-    throw new Error('Failed to delete profession');
+    console.error('Failed to delete tax object', error);
+    logError(error, null, 'Failed to delete tax object');
+    throw new Error('Failed to delete tax object');
   }
 };

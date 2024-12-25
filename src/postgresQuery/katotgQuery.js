@@ -49,7 +49,6 @@ const clearQuery = `
 const insertQuery = `
       INSERT INTO ${SCHEMA_NAME}.${tableName.katotg} (katotg, dps_name, adress, dps_code)
       VALUES ($1, $2, $3, $4)
-      RETURNING id, katotg, dps_name, adress, dps_code
     `;
 
 const deleteQuery = `
@@ -74,6 +73,12 @@ const searchQuery = `
       OR dps_code ILIKE $4
     `;
 
+const createQuery = `
+      INSERT INTO ${SCHEMA_NAME}.${tableName.katotg} (katotg, dps_name, adress, dps_code)
+      VALUES ($1, $2, $3, $4)
+      RETURNING id, katotg, dps_name, adress, dps_code
+    `;
+
 export const katotgQuery = {
   createKatotgTableQuery,
   countDuplicatesQuery,
@@ -82,4 +87,5 @@ export const katotgQuery = {
   deleteQuery,
   updateQuery,
   searchQuery,
+  createQuery,
 };

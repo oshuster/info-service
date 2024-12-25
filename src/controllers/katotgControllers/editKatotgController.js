@@ -1,6 +1,5 @@
 import { logError } from '../../config/logError.js';
 import { editKatotgService } from '../../services/katotgServices/editKatotgService.js';
-import { editProfessionService } from '../../services/profServices/editProfessionService.js';
 
 export const editKatotgController = async (req, res) => {
   try {
