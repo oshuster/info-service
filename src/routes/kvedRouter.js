@@ -5,7 +5,6 @@ import { logRequest } from '../config/logConfig.js';
 import { searchTaxObjectController } from '../controllers/taxObjectControllers/searchTaxObjectController.js';
 import { addUuidMiddleware } from '../middlewares/addUuidMiddleware.js';
 import { upload } from '../middlewares/multerMiddleware.js';
-import { uploadTaxObjectController } from '../controllers/taxObjectControllers/uploadTaxObjectController.js';
 import { checkJsonFile } from '../middlewares/checkJsonFile.js';
 import { uploadKvedController } from '../controllers/kvedControllers/uploadKvedController.js';
 
@@ -51,7 +50,7 @@ kvedRouter.use(logRequest);
  */
 
 kvedRouter.post(
-  '/kved/upload',
+  '/upload',
   upload.single('file'),
   checkJsonFile,
   uploadKvedController
@@ -86,7 +85,7 @@ kvedRouter.post(
  */
 
 kvedRouter.get(
-  '/kved/search',
+  '/search',
   checkQueryParam(['q']),
   ctrlWrapper(searchTaxObjectController)
 );

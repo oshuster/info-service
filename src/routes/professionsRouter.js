@@ -13,7 +13,7 @@ import { upload } from '../middlewares/multerMiddleware.js';
 import { checkExcelFile } from '../middlewares/checkExcelFile.js';
 import { createProfessionSchema } from '../schemas/professions/createSchema.js';
 import { editProfessionSchema } from '../schemas/professions/editSchema.js';
-import { deleteProfesions } from '../common/regexp/deleteProfesion.js';
+import { IDregexp } from '../common/regexp/deleteProfesion.js';
 import { checkForRegexp } from '../middlewares/checkForRegexp.js';
 
 const professionsRouter = express.Router();
@@ -59,7 +59,7 @@ professionsRouter.use(logRequest);
  */
 
 professionsRouter.get(
-  '/professions/search',
+  '/search',
   checkQueryParam(['q']),
   ctrlWrapper(profController)
 );
@@ -91,7 +91,7 @@ professionsRouter.get(
  */
 
 professionsRouter.post(
-  '/professions/create',
+  '/create',
   validateRequest(createProfessionSchema),
   ctrlWrapper(createProfController)
 );
@@ -124,9 +124,9 @@ professionsRouter.post(
  */
 
 professionsRouter.delete(
-  '/professions/delete',
+  '/delete',
   checkQueryParam(['id']),
-  checkForRegexp(deleteProfesions, 'id'),
+  checkForRegexp(IDregexp, 'id'),
   ctrlWrapper(deleteProfController)
 );
 
@@ -159,7 +159,7 @@ professionsRouter.delete(
  */
 
 professionsRouter.patch(
-  '/professions/edit',
+  '/edit',
   validateRequest(editProfessionSchema),
   ctrlWrapper(editProfController)
 );
@@ -193,7 +193,7 @@ professionsRouter.patch(
  */
 
 professionsRouter.post(
-  '/professions/upload',
+  '/upload',
   upload.single('file'),
   checkExcelFile,
   uploadProfController

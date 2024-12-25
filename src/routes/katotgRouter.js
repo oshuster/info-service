@@ -51,14 +51,14 @@ katotgRouter.use(logRequest);
  */
 
 katotgRouter.post(
-  '/katotg/upload',
+  '/upload',
   upload.single('file'),
   checkExcelFile,
   uploadKatotgController
 );
 
 katotgRouter.get(
-  '/katotg/search',
+  '/search',
   checkQueryParam(['q']),
   ctrlWrapper(searchKatotgController)
 );
