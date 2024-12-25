@@ -134,6 +134,47 @@ const options = {
           },
           required: ['id', 'code', 'name', 'description'],
         },
+        TaxObject: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'number',
+              description: 'Унікальний ідентифікатор обʼєкту',
+              example: 1,
+            },
+            type: {
+              type: 'string',
+              description: 'Код обʼєкту',
+              example: '123456',
+            },
+            name: {
+              type: 'string',
+              description: 'Назва обʼєкту',
+              example: 'Адміністративний будинок',
+            },
+          },
+        },
+        EditTaxObject: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'string',
+              description: 'ID обʼєкту',
+              example: '1',
+            },
+            type: {
+              type: 'string',
+              description: 'Новий код обʼєкту',
+              example: '654321',
+            },
+            name: {
+              type: 'string',
+              description: 'Нова назва обʼєкту',
+              example: 'Житловий будинок',
+            },
+          },
+          required: ['id', 'code', 'name'],
+        },
       },
       responses: {
         ProfessionNotFound: {
@@ -234,6 +275,31 @@ const options = {
                         message: {
                           type: 'string',
                           example: "Поле 'dps_name' обов'язкове",
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        ValidationTypeObjectsError: {
+          description: 'Помилка валідації даних',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  errors: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        field: { type: 'string', example: 'type' },
+                        message: {
+                          type: 'string',
+                          example: "Поле 'type' обов'язкове",
                         },
                       },
                     },

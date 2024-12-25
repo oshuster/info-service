@@ -25,33 +25,32 @@ taxObjectsRouter.use(logRequest);
  * @swagger
  * tags:
  *   name: Tax-Objects
- *   description: Класифікатор обʼєктів оподаткування
+ *   description: API для роботи з класифікатором обʼєктів оподаткування
  */
 
 /**
  * @swagger
  * /tax-objects/upload:
- *   patch:
- *     summary: Редагування професії
- *     description: Оновлює професію за ID.
+ *   post:
+ *     summary: Завантаження Excel-файлу
+ *     description: Завантажує Excel-файл для масового додавання обʼєктів оподаткування.
  *     tags: [Tax-Objects]
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/EditProfession'
+ *             type: object
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *                 description: Excel-файл для завантаження
  *     responses:
  *       200:
- *         description: Професія успішно оновлена.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Profession'
+ *         description: File uploaded successfully. Data will be updated within 1-15 minutes.
  *       400:
- *         description: Помилка валідації даних.
- *       404:
- *         description: Професія не знайдена.
+ *         description: Missing file
  *       500:
  *         description: Внутрішня помилка сервера.
  */
@@ -68,23 +67,26 @@ taxObjectsRouter.post(
  * /tax-objects/create:
  *   post:
  *     summary: Додавання обʼєкту оподаткування
- *     description: Додає новий обʼєкт оподаткування в список.
+ *     description: Додає новий обʼєкт оподаткування в базу даних.
  *     tags: [Tax-Objects]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/taxObjects/Profession'
+ *             $ref: '#/components/schemas/TaxObject'
+ *           example:
+ *             code: "123456"
+ *             name: "Адміністративний будинок"
  *     responses:
  *       201:
- *         description: Обʼєкт оподаткування успішно створена.
+ *         description: Обʼєкт успішно створено.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Profession'
+ *               $ref: '#/components/schemas/TaxObject'
  *       400:
- *         description: Помилка валідації даних.
+ *         $ref: '#/components/responses/ValidationTypeObjectsError'
  *       500:
  *         description: Внутрішня помилка сервера.
  */
@@ -97,28 +99,30 @@ taxObjectsRouter.post(
 
 /**
  * @swagger
- * /tax-object/search:
- *   patch:
+ * /tax-objects/search:
+ *   get:
  *     summary: Пошук обʼєкту оподаткування
- *     description: Пошук обʼєкту оподаткування за пошуковим словом.
+ *     description: Пошук обʼєктів оподаткування за ключовими словами.
  *     tags: [Tax-Objects]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/taxObjects/EditTaxObject'
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Ключове слово для пошуку
+ *         example: "Будинок"
  *     responses:
  *       200:
- *         description: Професія успішно оновлена.
+ *         description: Успішний пошук. Повертається список обʼєктів.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Profession'
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/TaxObject'
  *       400:
- *         description: Помилка валідації даних.
- *       404:
- *         description: Професія не знайдена.
+ *         $ref: '#/components/responses/ValidationTaxObjectsError'
  *       500:
  *         description: Внутрішня помилка сервера.
  */
@@ -131,7 +135,7 @@ taxObjectsRouter.get(
 
 /**
  * @swagger
- * /tax-object/edit:
+ * /tax-objects/edit:
  *   patch:
  *     summary: Редагування обʼєкту оподаткування
  *     description: Оновлює обʼєкт оподаткування за ID.
@@ -141,18 +145,22 @@ taxObjectsRouter.get(
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Tax/EditProfession'
+ *             $ref: '#/components/schemas/EditTaxObject'
+ *           example:
+ *             id: 1
+ *             code: "654321"
+ *             name: "Житловий будинок"
  *     responses:
  *       200:
- *         description: Професія успішно оновлена.
+ *         description: Обʼєкт успішно оновлено.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/professions/Profession'
+ *               $ref: '#/components/schemas/TaxObject'
  *       400:
- *         description: Помилка валідації даних.
+ *         $ref: '#/components/responses/ValidationTypeObjectsError'
  *       404:
- *         description: Професія не знайдена.
+ *         $ref: '#/components/responses/ObjectNotFound'
  *       500:
  *         description: Внутрішня помилка сервера.
  */
@@ -165,7 +173,7 @@ taxObjectsRouter.patch(
 
 /**
  * @swagger
- * /delete:
+ * /tax-objects/delete:
  *   delete:
  *     summary: Видалення обʼєкту оподаткування
  *     description: Видаляє обʼєкт оподаткування за ID.
@@ -177,15 +185,12 @@ taxObjectsRouter.patch(
  *           type: string
  *         required: true
  *         description: ID обʼєкту оподаткування для видалення
+ *         example: 1
  *     responses:
  *       200:
- *         description: Обʼєкт оподаткування успішно видалено.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/professions/Profession'
+ *         description: Обʼєкт успішно видалено.
  *       404:
- *         description: Професія не знайдена.
+ *         $ref: '#/components/responses/ObjectNotFound'
  *       500:
  *         description: Внутрішня помилка сервера.
  */
