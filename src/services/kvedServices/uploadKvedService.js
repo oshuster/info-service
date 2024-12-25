@@ -54,7 +54,7 @@ export const uploadKvedService = async (client, file) => {
           Description,
           Info,
         ]);
-        migrationLogger.info(
+        migrationLogger.debug(
           `Row ${index + 1} inserted: Code=${Code}, Name=${Name}`
         );
       } catch (error) {
