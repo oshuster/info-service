@@ -169,7 +169,7 @@ taxObjectsRouter.patch(
  *   delete:
  *     summary: Видалення обʼєкту оподаткування
  *     description: Видаляє обʼєкт оподаткування за ID.
- *     tags: [Tax-Object]
+ *     tags: [Tax-Objects]
  *     parameters:
  *       - in: query
  *         name: id

@@ -7,10 +7,8 @@ export const createKvedController = async (req, res) => {
 
     res.json(result);
   } catch (error) {
-    console.error('Error in profController:', error);
-    logError(error, req, 'Error in profController');
-    res
-      .status(500)
-      .json({ error: 'Failed to create in classifier of professions' });
+    console.error('Error in kved controller:', error);
+    logError(error, req, 'Error in kved controller');
+    res.status(500).json({ error: 'Failed to create in kved' });
   }
 };
