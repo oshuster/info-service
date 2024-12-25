@@ -1,6 +1,5 @@
 import express from 'express';
 import { checkQueryParam } from '../middlewares/checkQueryParams.js';
-import { ctrlWrapper } from '../helpers/ctrlWrapper.js';
 import { logRequest } from '../config/logConfig.js';
 import { searchTaxObjectController } from '../controllers/taxObjectControllers/searchTaxObjectController.js';
 import { addUuidMiddleware } from '../middlewares/addUuidMiddleware.js';
