@@ -1,6 +1,6 @@
 import express from 'express';
 import { logRequest } from '../config/logConfig.js';
-import { checkQueryParam } from '../helpers/checkQueryParams.js';
+import { checkQueryParam } from '../middlewares/checkQueryParams.js';
 import { ctrlWrapper } from '../helpers/ctrlWrapper.js';
 import { addUuidMiddleware } from '../middlewares/addUuidMiddleware.js';
 import { validateRequest } from '../middlewares/validateProfession.js';
@@ -13,6 +13,8 @@ import { upload } from '../middlewares/multerMiddleware.js';
 import { checkExcelFile } from '../middlewares/checkExcelFile.js';
 import { createProfessionSchema } from '../schemas/professions/createSchema.js';
 import { editProfessionSchema } from '../schemas/professions/editSchema.js';
+import { deleteProfesions } from '../common/regexp/deleteProfesion.js';
+import { checkForRegexp } from '../middlewares/checkForRegexp.js';
 
 const professionsRouter = express.Router();
 
@@ -124,6 +126,7 @@ professionsRouter.post(
 professionsRouter.delete(
   '/professions/delete',
   checkQueryParam(['id']),
+  checkForRegexp(deleteProfesions, 'id'),
   ctrlWrapper(deleteProfController)
 );
 
