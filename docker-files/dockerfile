@@ -3,12 +3,12 @@ FROM node:20.12-alpine3.18
 # Додано залежності
 RUN apk update && apk add --no-cache git bash
 
-WORKDIR /app/prof-service
+WORKDIR /app/info-service
 
-RUN git clone -b db-postgres https://github.com/oshuster/prof-service.git .
+RUN git clone -b main https://github.com/oshuster/info-service.git .
 
 RUN npm install
 
-EXPOSE 8183
+EXPOSE 8080
 
 CMD ["npm", "start"]
