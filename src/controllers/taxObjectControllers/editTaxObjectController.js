@@ -1,22 +1,20 @@
 import { logError } from '../../config/logError.js';
-import { editProfessionService } from '../../services/profServices/editProfessionService.js';
+import { editTaxObjectService } from '../../services/taxObjectServices/editTaxObjectService.js';
 
 export const editTaxObjectController = async (req, res) => {
   try {
-    const result = await editProfessionService(req.client, req.body);
+    const result = await editTaxObjectService(req.client, req.body);
 
     if (!result) {
       return res
         .status(404)
-        .json({ message: `Profession with ID ${req.body.id} not found` });
+        .json({ message: `Tax object with ID ${req.body.id} not found` });
     }
 
     res.json(result);
   } catch (error) {
-    console.error('Error in profController:', error);
-    logError(error, req, 'Error in profController');
-    res
-      .status(500)
-      .json({ error: 'Failed to create in classifier of professions' });
+    console.error('Error in editTaxObjectController:', error);
+    logError(error, req, 'Error in editTaxObjectController');
+    res.status(500).json({ error: 'Failed to edit taxObject' });
   }
 };

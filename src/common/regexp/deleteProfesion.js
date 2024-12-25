@@ -1,1 +1,1 @@
-export const deleteProfesions = /^[0-9]+$/;
+export const IDregexp = /^[0-9]+$/;

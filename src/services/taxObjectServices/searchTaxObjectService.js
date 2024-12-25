@@ -8,7 +8,7 @@ export const searchTypeObjectService = async (client, query) => {
     ]);
 
     // [{id: id, type: type, name: name}]
-    const formattedResults = results.map((row) => ({
+    const formattedResults = results.rows.map((row) => ({
       id: row.id,
       type: row.type,
       name: row.name,
