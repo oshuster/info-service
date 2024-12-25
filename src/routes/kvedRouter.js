@@ -52,7 +52,7 @@ kvedRouter.use(logRequest);
  *       200:
  *         description: File uploaded successfully. Data will be updated within 1-15 minutes.
  *       400:
- *         $ref: '#/components/responses/ValidationError'
+ *         description: Missing file
  *       500:
  *         description: Внутрішня помилка сервера.
  */
@@ -66,28 +66,30 @@ kvedRouter.post(
 
 /**
  * @swagger
- * /search:
- *   patch:
+ * /kved/search:
+ *   get:
  *     summary: Пошук КВЕД
- *     description: Пошук КВЕД за ключовим словом.
+ *     description: Пошук КВЕД за ключовими словами.
  *     tags: [KVED]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/EditProfession'
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Ключове слово для пошуку
+ *         example: "виробництво"
  *     responses:
  *       200:
- *         description: Професія успішно оновлена.
+ *         description: Успішний пошук. Повертається список КВЕД.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Profession'
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/KVED'
  *       400:
- *         description: Помилка валідації даних.
- *       404:
- *         description: Професія не знайдена.
+ *         $ref: '#/components/responses/ValidationKvedError'
  *       500:
  *         description: Внутрішня помилка сервера.
  */
@@ -99,23 +101,26 @@ kvedRouter.get('/search', checkQueryParam(['q']), searchKvedController);
  * /kved/create:
  *   post:
  *     summary: Додавання КВЕД
- *     description: Додає новий КВЕД в список.
+ *     description: Додає новий запис КВЕД у базу даних.
  *     tags: [KVED]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/taxObjects/Profession'
+ *             $ref: '#/components/schemas/KVED'
+ *           example:
+ *             code: "22.22"
+ *             name: "Виробництво електрообладнання"
  *     responses:
  *       201:
- *         description: Обʼєкт оподаткування успішно створена.
+ *         description: КВЕД успішно створено.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Profession'
+ *               $ref: '#/components/schemas/KVED'
  *       400:
- *         description: Помилка валідації даних.
+ *         $ref: '#/components/responses/ValidationKvedError'
  *       500:
  *         description: Внутрішня помилка сервера.
  */
@@ -133,25 +138,31 @@ kvedRouter.post(
  * /kved/edit:
  *   patch:
  *     summary: Редагування КВЕД
- *     description: Оновлює КВЕД за ID.
+ *     description: Оновлює запис КВЕД за ID.
  *     tags: [KVED]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Tax/EditProfession'
+ *             $ref: '#/components/schemas/EditKVED'
+ *           example:
+ *             id: 1
+ *             code: "56789"
+ *             name: "Новий опис діяльності"
+ *             description: "<p>Виробництво електрообладнання</p>"
+ *             info: "Додаткова інформація"
  *     responses:
  *       200:
- *         description: Професія успішно оновлена.
+ *         description: КВЕД успішно оновлено.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/professions/Profession'
+ *               $ref: '#/components/schemas/KVED'
  *       400:
- *         description: Помилка валідації даних.
+ *         $ref: '#/components/responses/ValidationKvedError'
  *       404:
- *         description: Професія не знайдена.
+ *         $ref: '#/components/responses/ObjectNotFound'
  *       500:
  *         description: Внутрішня помилка сервера.
  */
@@ -168,8 +179,8 @@ kvedRouter.patch(
  * @swagger
  * /kved/delete:
  *   delete:
- *     summary: Видалення обʼєкту оподаткування
- *     description: Видаляє обʼєкт оподаткування за ID.
+ *     summary: Видалення КВЕД
+ *     description: Видаляє запис КВЕД за ID.
  *     tags: [KVED]
  *     parameters:
  *       - in: query
@@ -177,16 +188,17 @@ kvedRouter.patch(
  *         schema:
  *           type: string
  *         required: true
- *         description: ID обʼєкту оподаткування для видалення
+ *         description: ID КВЕД для видалення
+ *         example: 1
  *     responses:
  *       200:
- *         description: Обʼєкт оподаткування успішно видалено.
+ *         description: КВЕД успішно видалено.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/professions/Profession'
+ *               $ref: '#/components/schemas/KVED'
  *       404:
- *         description: Професія не знайдена.
+ *         $ref: '#/components/responses/ObjectNotFound'
  *       500:
  *         description: Внутрішня помилка сервера.
  */

@@ -77,19 +77,29 @@ const options = {
           type: 'object',
           properties: {
             id: {
-              type: 'string',
+              type: 'number',
               description: 'Унікальний ідентифікатор КВЕД',
-              example: '1',
+              example: 1,
             },
             code: {
               type: 'string',
               description: 'Код КВЕД',
-              example: '01234',
+              example: '11.11',
             },
             name: {
               type: 'string',
               description: 'Опис виду діяльності',
               example: 'Виробництво електрообладнання',
+            },
+            description: {
+              type: 'string',
+              description: 'html markup',
+              example: '<p>Виробництво електрообладнання</p>',
+            },
+            info: {
+              type: 'string',
+              description: 'Додтковий текст',
+              example: 'Додаткова інформація',
             },
           },
         },
@@ -97,9 +107,9 @@ const options = {
           type: 'object',
           properties: {
             id: {
-              type: 'string',
+              type: 'number',
               description: 'ID запису КВЕД',
-              example: '1',
+              example: 1,
             },
             code: {
               type: 'string',
@@ -111,8 +121,18 @@ const options = {
               description: 'Новий опис діяльності',
               example: 'Роздрібна торгівля',
             },
+            description: {
+              type: 'string',
+              description: 'html markup',
+              example: '<p>Виробництво електрообладнання</p>',
+            },
+            info: {
+              type: 'string',
+              description: 'Додтковий текст',
+              example: 'Додаткова інформація',
+            },
           },
-          required: ['id', 'code', 'name'],
+          required: ['id', 'code', 'name', 'description'],
         },
       },
       responses: {
@@ -164,6 +184,31 @@ const options = {
                         message: {
                           type: 'string',
                           example: "Поле 'code_kp' обов'язкове",
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        ValidationKvedError: {
+          description: 'Помилка валідації даних',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  errors: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        field: { type: 'string', example: 'description' },
+                        message: {
+                          type: 'string',
+                          example: "Поле 'description' обов'язкове",
                         },
                       },
                     },
