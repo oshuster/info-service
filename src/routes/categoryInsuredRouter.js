@@ -3,17 +3,12 @@ import { checkQueryParam } from '../middlewares/checkQueryParams.js';
 import { logRequest } from '../config/logConfig.js';
 import { addUuidMiddleware } from '../middlewares/addUuidMiddleware.js';
 import { validateRequest } from '../middlewares/validateProfession.js';
-import { searchCodeIncomeController } from '../controllers/codeIncomeControllers/searchCodeIncomeController.js';
-import { createCodeIncomeController } from '../controllers/codeIncomeControllers/createCodeIncomeController.js';
-import { createCodeIncomeSchema } from '../schemas/codeIncome/createCodeIncomeSchema.js';
-import { editCodeIncomeSchema } from '../schemas/codeIncome/editCodeIncomeSchema.js';
-import { editCodeIncomeController } from '../controllers/codeIncomeControllers/editCodeIncomeController.js';
-import { deleteCodeIncomeController } from '../controllers/codeIncomeControllers/deleteCodeIncomeController.js';
 import { searchCategoryInsuredController } from '../controllers/categoryInsuredControllers/searchCategoryInsuredController.js';
 import { editCategoryInsuredController } from '../controllers/categoryInsuredControllers/editCategoryInsuredController.js';
 import { deleteCategoryInsuredController } from '../controllers/categoryInsuredControllers/deleteCategoryInsuredController.js';
 import { createCategoryInsuredSchema } from '../schemas/categoryInsured/createCategoryInsuredSchema.js';
 import { createCategoryInsuredController } from '../controllers/categoryInsuredControllers/createCategoryInsuredController.js';
+import { editCategoryInsuredSchema } from '../schemas/categoryInsured/editCategoryInsuredSchema.js';
 
 const categoryInsuredRouter = express.Router();
 
@@ -25,34 +20,35 @@ categoryInsuredRouter.use(logRequest);
  * @swagger
  * tags:
  *   name: Category-Insured
- *   description: API для роботи з кодами категорії застрахованої особи
+ *   description: API для роботи з кодами категорій застрахованої особи
  */
 
 /**
  * @swagger
- * /code-insured/create:
+ * /category-insured/create:
  *   post:
- *     summary: Додавання коду доходу
- *     description: Додає новий код доходу в базу даних.
- *     tags: [Code-Income]
+ *     summary: Додавання категорії застрахованої особи
+ *     description: Додає нову категорію застрахованої особи в базу даних.
+ *     tags: [Category-Insured]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/CodeIncome'
+ *             $ref: '#/components/schemas/CategoryInsured'
  *           example:
  *             code: 12345
- *             name: "Доходи від продажу напоїв"
+ *             name: "Категорія працівників ІТ-сфери"
+ *             description: "Категорія працівників ІТ-сфери"
  *     responses:
  *       201:
- *         description: Код доходу успішно створено.
+ *         description: Категорію успішно створено.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/CodeIncome'
+ *               $ref: '#/components/schemas/CategoryInsured'
  *       400:
- *         $ref: '#/components/responses/ValidationCodeIncomeError'
+ *         $ref: '#/components/responses/ValidationKvedError'
  *       500:
  *         description: Внутрішня помилка сервера.
  */
@@ -65,11 +61,11 @@ categoryInsuredRouter.post(
 
 /**
  * @swagger
- * /code-insured/search:
+ * /category-insured/search:
  *   get:
- *     summary: Пошук кодів доходів
- *     description: Пошук кодів доходів за ключовими словами.
- *     tags: [Code-Income]
+ *     summary: Пошук категорій застрахованих осіб
+ *     description: Пошук категорій застрахованих осіб за ключовими словами.
+ *     tags: [Category-Insured]
  *     parameters:
  *       - in: query
  *         name: q
@@ -77,98 +73,95 @@ categoryInsuredRouter.post(
  *           type: string
  *         required: true
  *         description: Ключове слово для пошуку
- *         example: "Продаж"
+ *         example: "Працівники"
  *     responses:
  *       200:
- *         description: Успішний пошук. Повертається список кодів доходів.
+ *         description: Успішний пошук. Повертається список категорій застрахованих осіб.
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/CodeIncome'
+ *                 $ref: '#/components/schemas/CategoryInsured'
  *       400:
- *         $ref: '#/components/responses/ValidationCodeIncomeError'
+ *         $ref: '#/components/responses/ValidationKvedError'
  *       500:
  *         description: Внутрішня помилка сервера.
  */
 
-// categoryInsuredRouter.get(
-//   '/search',
-//   checkQueryParam(['q']),
-//   searchCategoryInsuredController
-// );
+categoryInsuredRouter.get(
+  '/search',
+  checkQueryParam(['q']),
+  searchCategoryInsuredController
+);
 
 /**
  * @swagger
- * /code-insured/edit:
+ * /category-insured/edit:
  *   patch:
- *     summary: Редагування коду доходу
- *     description: Оновлює існуючий код доходу за ID.
- *     tags: [Code-Income]
+ *     summary: Редагування категорії застрахованої особи
+ *     description: Оновлює існуючу категорію застрахованої особи за ID.
+ *     tags: [Category-Insured]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/EditCodeIncome'
+ *             $ref: '#/components/schemas/EditCategoryInsured'
  *           example:
  *             id: "48be695f-962c-49c5-9789-5fee3c6c06b3"
  *             code: 54321
- *             name: "Доходи від здачі в оренду майна"
+ *             name: "Працівники будівельної сфери"
+ *             description: "Категорія працівників ІТ-сфери"
  *     responses:
  *       200:
- *         description: Код доходу успішно оновлено.
+ *         description: Категорію успішно оновлено.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/CodeIncome'
+ *               $ref: '#/components/schemas/CategoryInsured'
  *       400:
- *         $ref: '#/components/responses/ValidationCodeIncomeError'
+ *         $ref: '#/components/responses/ValidationKvedError'
  *       404:
  *         $ref: '#/components/responses/ObjectNotFound'
  *       500:
  *         description: Внутрішня помилка сервера.
  */
 
-// categoryInsuredRouter.patch(
-//   '/edit',
-//   validateRequest(editCodeIncomeSchema),
-//   editCategoryInsuredController
-// );
+categoryInsuredRouter.patch(
+  '/edit',
+  validateRequest(editCategoryInsuredSchema),
+  editCategoryInsuredController
+);
 
 /**
  * @swagger
- * /code-insured/delete:
+ * /category-insured/delete:
  *   delete:
- *     summary: Видалення коду доходу
- *     description: Видаляє код доходу за ID.
- *     tags: [Code-Income]
+ *     summary: Видалення категорії застрахованої особи
+ *     description: Видаляє категорію застрахованої особи за ID.
+ *     tags: [Category-Insured]
  *     parameters:
  *       - in: query
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *         description: ID коду доходу для видалення
+ *         description: ID категорії для видалення
  *         example: "48be695f-962c-49c5-9789-5fee3c6c06b0"
  *     responses:
  *       200:
- *         description: Код доходу успішно видалено.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/CodeIncome'
+ *         description: Категорію успішно видалено.
  *       404:
  *         $ref: '#/components/responses/ObjectNotFound'
  *       500:
  *         description: Внутрішня помилка сервера.
  */
 
-// categoryInsuredRouter.delete(
-//   '/delete',
-//   checkQueryParam(['id']),
-//   deleteCategoryInsuredController
-// );
+categoryInsuredRouter.delete(
+  '/delete',
+  checkQueryParam(['id']),
+  deleteCategoryInsuredController
+);
 
 export default categoryInsuredRouter;

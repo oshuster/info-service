@@ -21,30 +21,30 @@ const createQuery = `
       RETURNING id, code, name, description, created_at, updated_at
     `;
 
-// const deleteQuery = `
-//       DELETE FROM ${SCHEMA_NAME}.${tableName.codeIncome}
-//       WHERE id = $1
-//       RETURNING id, code, name, date, created_at, updated_at
-//     `;
+const searchQuery = `
+          SELECT id, code, name, description, created_at, updated_at
+          FROM ${SCHEMA_NAME}.${tableName.categoryInsured}
+          WHERE name ILIKE $1
+          OR name ILIKE $2
+        `;
 
-// const updateQuery = `
-//       UPDATE ${SCHEMA_NAME}.${tableName.codeIncome}
-//       SET code = $2, name = $3
-//       WHERE id = $1
-//       RETURNING id, code, name, date, created_at, updated_at
-//     `;
+const updateQuery = `
+              UPDATE ${SCHEMA_NAME}.${tableName.categoryInsured}
+              SET code = $2, name = $3, description = $4
+              WHERE id = $1
+              RETURNING id, code, name, description, created_at, updated_at
+            `;
 
-// const searchQuery = `
-//       SELECT id, code, name, date, created_at, updated_at
-//       FROM ${SCHEMA_NAME}.${tableName.codeIncome}
-//       WHERE code::text ILIKE $1
-//       OR name ILIKE $2
-//     `;
+const deleteQuery = `
+      DELETE FROM ${SCHEMA_NAME}.${tableName.categoryInsured}
+      WHERE id = $1
+      RETURNING id, code, name, description, created_at, updated_at
+    `;
 
 export const categoryInsuredQuery = {
   createCategoryInsuredTableQuery,
-  // deleteQuery,
-  // updateQuery,
-  // searchQuery,
+  deleteQuery,
+  updateQuery,
+  searchQuery,
   createQuery,
 };

@@ -7,4 +7,8 @@ export const editCategoryInsuredSchema = yup.object({
     .string()
     .required("Поле 'name' обов'язкове")
     .max(300, "Поле 'name' має бути не більше 300 символів"),
+  description: yup
+    .string()
+    .required("Поле 'description' обов'язкове")
+    .max(500, "Поле 'description' має бути не більше 500 символів"),
 });

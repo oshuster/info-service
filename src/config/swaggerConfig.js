@@ -22,6 +22,57 @@ const options = {
     ],
     components: {
       schemas: {
+        CategoryInsured: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'string',
+              description: 'Унікальний ідентифікатор категорії',
+              example: '48be695f-962c-49c5-9789-5fee3c6c06b0',
+            },
+            code: {
+              type: 'number',
+              description: 'Код категорії',
+              example: 1234,
+            },
+            name: {
+              type: 'string',
+              description: 'Назва категорії',
+              example: 'Працівники ІТ-сфери',
+            },
+            description: {
+              type: 'string',
+              description: 'Jпис категорії',
+              example: 'Працівники ІТ-сфери',
+            },
+          },
+        },
+        EditCategoryInsured: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'string',
+              description: 'ID категорії',
+              example: '48be695f-962c-49c5-9789-5fee3c6c06b0',
+            },
+            code: {
+              type: 'number',
+              description: 'Новий код категорії',
+              example: 321,
+            },
+            name: {
+              type: 'string',
+              description: 'Оновлена назва категорії',
+              example: 'Працівники будівельної сфери',
+            },
+            description: {
+              type: 'string',
+              description: 'Оновлений опис категорії',
+              example: 'Працівники будівельної сфери',
+            },
+          },
+          required: ['id', 'code', 'name'],
+        },
         Profession: {
           type: 'object',
           properties: {

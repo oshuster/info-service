@@ -1,8 +1,8 @@
-import { codeIncomeQuery } from '../../postgresQuery/codeIncomeQuery.js';
+import { categoryInsuredQuery } from '../../postgresQuery/categoryInsuredQuery.js';
 
 export const searchCategoryInsuredService = async (client, query) => {
   try {
-    const results = await client.query(codeIncomeQuery.searchQuery, [
+    const results = await client.query(categoryInsuredQuery.searchQuery, [
       `%${query}%`,
       `%${query}%`,
     ]);
@@ -11,14 +11,14 @@ export const searchCategoryInsuredService = async (client, query) => {
       id: row.id,
       code: row.code,
       name: row.name,
-      date: row.date,
+      description: row.description,
       created_at: row.created_at,
       updated_at: row.updated_at,
     }));
 
     return formattedResults;
   } catch (error) {
-    console.error('Failed to search code income', error);
-    throw new Error('Failed to search code income');
+    console.error('Failed to search category insured', error);
+    throw new Error('Failed to search category insured');
   }
 };
