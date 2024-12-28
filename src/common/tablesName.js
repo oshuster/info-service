@@ -3,4 +3,6 @@ export const tableName = {
   taxObjects: 'tax_objects',
   katotg: 'katotg',
   kved: 'kved',
+  codeIncome: 'code_income',
+  categoryInsured: 'category_insured',
 };

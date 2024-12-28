@@ -1,3 +1,4 @@
+import { codeIncomeQuery } from '../postgresQuery/codeIncomeQuery.js';
 import { katotgQuery } from '../postgresQuery/katotgQuery.js';
 import { kvedQuery } from '../postgresQuery/kvedQuery.js';
 import { professionsQuery } from '../postgresQuery/professionQuery.js';
@@ -20,5 +21,9 @@ export const tables = [
   {
     name: tableName.kved,
     createQuery: kvedQuery.createTaxObjectsTableQuery,
+  },
+  {
+    name: tableName.codeIncome,
+    createQuery: codeIncomeQuery.createKatotgTableQuery,
   },
 ];
