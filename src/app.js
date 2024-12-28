@@ -11,6 +11,7 @@ import taxObjectsRouter from './routes/taxObjectsRouter.js';
 import katotgRouter from './routes/katotgRouter.js';
 import kvedRouter from './routes/kvedRouter.js';
 import codeIncomeRouter from './routes/codeIncomeRouter.js';
+import categoryInsuredRouter from './routes/categoryInsuredRouter.js';
 
 const HTTP_PORT = process.env.PORT || 3344;
 const app = express();
@@ -40,6 +41,7 @@ const startServer = async () => {
     app.use('/info-service/katotg', katotgRouter);
     app.use('/info-service/kved', kvedRouter);
     app.use('/info-service/code-income', codeIncomeRouter);
+    app.use('/info-service/code-insured', categoryInsuredRouter);
 
     swaggerDocs(app, HTTP_PORT);
 

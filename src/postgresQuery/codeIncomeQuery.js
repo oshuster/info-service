@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { tableName } from '../common/tablesName.js';
 const SCHEMA_NAME = process.env.SCHEMA_NAME || 'info_service';
 
-const createKatotgTableQuery = `
+const createCodeIncomeTableQuery = `
   CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
   CREATE TABLE IF NOT EXISTS ${SCHEMA_NAME}.${tableName.codeIncome} (
@@ -42,7 +42,7 @@ const searchQuery = `
     `;
 
 export const codeIncomeQuery = {
-  createKatotgTableQuery,
+  createCodeIncomeTableQuery,
   deleteQuery,
   updateQuery,
   searchQuery,

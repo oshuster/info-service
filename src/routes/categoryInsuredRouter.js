@@ -9,23 +9,28 @@ import { createCodeIncomeSchema } from '../schemas/codeIncome/createCodeIncomeSc
 import { editCodeIncomeSchema } from '../schemas/codeIncome/editCodeIncomeSchema.js';
 import { editCodeIncomeController } from '../controllers/codeIncomeControllers/editCodeIncomeController.js';
 import { deleteCodeIncomeController } from '../controllers/codeIncomeControllers/deleteCodeIncomeController.js';
+import { searchCategoryInsuredController } from '../controllers/categoryInsuredControllers/searchCategoryInsuredController.js';
+import { editCategoryInsuredController } from '../controllers/categoryInsuredControllers/editCategoryInsuredController.js';
+import { deleteCategoryInsuredController } from '../controllers/categoryInsuredControllers/deleteCategoryInsuredController.js';
+import { createCategoryInsuredSchema } from '../schemas/categoryInsured/createCategoryInsuredSchema.js';
+import { createCategoryInsuredController } from '../controllers/categoryInsuredControllers/createCategoryInsuredController.js';
 
-const codeIncomeRouter = express.Router();
+const categoryInsuredRouter = express.Router();
 
-codeIncomeRouter.use(addUuidMiddleware);
+categoryInsuredRouter.use(addUuidMiddleware);
 
-codeIncomeRouter.use(logRequest);
+categoryInsuredRouter.use(logRequest);
 
 /**
  * @swagger
  * tags:
- *   name: Code-Income
- *   description: API для роботи з кодами ознаки доходів
+ *   name: Category-Insured
+ *   description: API для роботи з кодами категорії застрахованої особи
  */
 
 /**
  * @swagger
- * /code-income/create:
+ * /code-insured/create:
  *   post:
  *     summary: Додавання коду доходу
  *     description: Додає новий код доходу в базу даних.
@@ -52,15 +57,15 @@ codeIncomeRouter.use(logRequest);
  *         description: Внутрішня помилка сервера.
  */
 
-codeIncomeRouter.post(
+categoryInsuredRouter.post(
   '/create',
-  validateRequest(createCodeIncomeSchema),
-  createCodeIncomeController
+  validateRequest(createCategoryInsuredSchema),
+  createCategoryInsuredController
 );
 
 /**
  * @swagger
- * /code-income/search:
+ * /code-insured/search:
  *   get:
  *     summary: Пошук кодів доходів
  *     description: Пошук кодів доходів за ключовими словами.
@@ -88,15 +93,15 @@ codeIncomeRouter.post(
  *         description: Внутрішня помилка сервера.
  */
 
-codeIncomeRouter.get(
-  '/search',
-  checkQueryParam(['q']),
-  searchCodeIncomeController
-);
+// categoryInsuredRouter.get(
+//   '/search',
+//   checkQueryParam(['q']),
+//   searchCategoryInsuredController
+// );
 
 /**
  * @swagger
- * /code-income/edit:
+ * /code-insured/edit:
  *   patch:
  *     summary: Редагування коду доходу
  *     description: Оновлює існуючий код доходу за ID.
@@ -126,15 +131,15 @@ codeIncomeRouter.get(
  *         description: Внутрішня помилка сервера.
  */
 
-codeIncomeRouter.patch(
-  '/edit',
-  validateRequest(editCodeIncomeSchema),
-  editCodeIncomeController
-);
+// categoryInsuredRouter.patch(
+//   '/edit',
+//   validateRequest(editCodeIncomeSchema),
+//   editCategoryInsuredController
+// );
 
 /**
  * @swagger
- * /code-income/delete:
+ * /code-insured/delete:
  *   delete:
  *     summary: Видалення коду доходу
  *     description: Видаляє код доходу за ID.
@@ -160,10 +165,10 @@ codeIncomeRouter.patch(
  *         description: Внутрішня помилка сервера.
  */
 
-codeIncomeRouter.delete(
-  '/delete',
-  checkQueryParam(['id']),
-  deleteCodeIncomeController
-);
+// categoryInsuredRouter.delete(
+//   '/delete',
+//   checkQueryParam(['id']),
+//   deleteCategoryInsuredController
+// );
 
-export default codeIncomeRouter;
+export default categoryInsuredRouter;

@@ -1,3 +1,4 @@
+import { categoryInsuredQuery } from '../postgresQuery/categoryInsuredQuery.js';
 import { codeIncomeQuery } from '../postgresQuery/codeIncomeQuery.js';
 import { katotgQuery } from '../postgresQuery/katotgQuery.js';
 import { kvedQuery } from '../postgresQuery/kvedQuery.js';
@@ -20,10 +21,14 @@ export const tables = [
   },
   {
     name: tableName.kved,
-    createQuery: kvedQuery.createTaxObjectsTableQuery,
+    createQuery: kvedQuery.createKvedTableQuery,
   },
   {
     name: tableName.codeIncome,
-    createQuery: codeIncomeQuery.createKatotgTableQuery,
+    createQuery: codeIncomeQuery.createCodeIncomeTableQuery,
+  },
+  {
+    name: tableName.categoryInsured,
+    createQuery: categoryInsuredQuery.createCategoryInsuredTableQuery,
   },
 ];

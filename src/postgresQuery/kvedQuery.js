@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { tableName } from '../common/tablesName.js';
 const SCHEMA_NAME = process.env.SCHEMA_NAME || 'info_service';
 
-const createTaxObjectsTableQuery = `
+const createKvedTableQuery = `
       CREATE TABLE IF NOT EXISTS ${SCHEMA_NAME}.${tableName.kved} (
         id SERIAL PRIMARY KEY,
         code VARCHAR(10) NOT NULL,
@@ -48,7 +48,7 @@ const searchQuery = `
     `;
 
 export const kvedQuery = {
-  createTaxObjectsTableQuery,
+  createKvedTableQuery,
   insertQuery,
   createQuery,
   deleteQuery,
