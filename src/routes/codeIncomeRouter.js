@@ -1,19 +1,9 @@
 import express from 'express';
 import { checkQueryParam } from '../middlewares/checkQueryParams.js';
 import { logRequest } from '../config/logConfig.js';
-import { searchTaxObjectController } from '../controllers/taxObjectControllers/searchTaxObjectController.js';
 import { addUuidMiddleware } from '../middlewares/addUuidMiddleware.js';
-import { upload } from '../middlewares/multerMiddleware.js';
-import { checkExcelFile } from '../middlewares/checkExcelFile.js';
 import { uploadTaxObjectController } from '../controllers/taxObjectControllers/uploadTaxObjectController.js';
 import { validateRequest } from '../middlewares/validateProfession.js';
-import { createTaxObjectController } from '../controllers/taxObjectControllers/createTaxObjectController.js';
-import { createTaxObjectSchema } from '../schemas/taxObjects/createTaxObjectSchema.js';
-import { editTaxObjectSchema } from '../schemas/taxObjects/editTaxObjectSchema.js';
-import { editTaxObjectController } from '../controllers/taxObjectControllers/editTaxObjectController.js';
-import { checkForRegexp } from '../middlewares/checkForRegexp.js';
-import { IDregexp } from '../common/regexp/deleteProfesion.js';
-import { deleteTaxObjectController } from '../controllers/taxObjectControllers/deleteTaxObjectController.js';
 import { searchCodeIncomeController } from '../controllers/codeIncomeControllers/searchCodeIncomeController.js';
 import { createCodeIncomeController } from '../controllers/codeIncomeControllers/createCodeIncomeController.js';
 import { createCodeIncomeSchema } from '../schemas/codeIncome/createCodeIncomeSchema.js';
@@ -46,19 +36,19 @@ codeIncomeRouter.use(logRequest);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/TaxObject'
+ *             $ref: '#/components/schemas/CodeIncome'
  *           example:
  *             code: 12345
- *             name: "Доходи за продаж напоїв"
+ *             name: "Доходи від продажу напоїв"
  *     responses:
  *       201:
- *         description: Обʼєкт успішно створено.
+ *         description: Код доходу успішно створено.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/TaxObject'
+ *               $ref: '#/components/schemas/CodeIncome'
  *       400:
- *         $ref: '#/components/responses/ValidationTypeObjectsError'
+ *         $ref: '#/components/responses/ValidationCodeIncomeError'
  *       500:
  *         description: Внутрішня помилка сервера.
  */
@@ -71,11 +61,11 @@ codeIncomeRouter.post(
 
 /**
  * @swagger
- * /tax-objects/search:
+ * /code-income/search:
  *   get:
- *     summary: Пошук обʼєкту оподаткування
- *     description: Пошук обʼєктів оподаткування за ключовими словами.
- *     tags: [Tax-Objects]
+ *     summary: Пошук кодів доходів
+ *     description: Пошук кодів доходів за ключовими словами.
+ *     tags: [Code-Income]
  *     parameters:
  *       - in: query
  *         name: q
@@ -83,18 +73,18 @@ codeIncomeRouter.post(
  *           type: string
  *         required: true
  *         description: Ключове слово для пошуку
- *         example: "Будинок"
+ *         example: "Продаж"
  *     responses:
  *       200:
- *         description: Успішний пошук. Повертається список обʼєктів.
+ *         description: Успішний пошук. Повертається список кодів доходів.
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/TaxObject'
+ *                 $ref: '#/components/schemas/CodeIncome'
  *       400:
- *         $ref: '#/components/responses/ValidationTaxObjectsError'
+ *         $ref: '#/components/responses/ValidationCodeIncomeError'
  *       500:
  *         description: Внутрішня помилка сервера.
  */
@@ -109,28 +99,28 @@ codeIncomeRouter.get(
  * @swagger
  * /code-income/edit:
  *   patch:
- *     summary: Редагування обʼєкту оподаткування
- *     description: Оновлює обʼєкт оподаткування за ID.
- *     tags: [Tax-Objects]
+ *     summary: Редагування коду доходу
+ *     description: Оновлює існуючий код доходу за ID.
+ *     tags: [Code-Income]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/EditTaxObject'
+ *             $ref: '#/components/schemas/EditCodeIncome'
  *           example:
- *             id: 1
- *             code: "654321"
- *             name: "Житловий будинок"
+ *             id: "48be695f-962c-49c5-9789-5fee3c6c06b3"
+ *             code: 54321
+ *             name: "Доходи від здачі в оренду майна"
  *     responses:
  *       200:
- *         description: Обʼєкт успішно оновлено.
+ *         description: Код доходу успішно оновлено.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/TaxObject'
+ *               $ref: '#/components/schemas/CodeIncome'
  *       400:
- *         $ref: '#/components/responses/ValidationTypeObjectsError'
+ *         $ref: '#/components/responses/ValidationCodeIncomeError'
  *       404:
  *         $ref: '#/components/responses/ObjectNotFound'
  *       500:
@@ -147,8 +137,8 @@ codeIncomeRouter.patch(
  * @swagger
  * /code-income/delete:
  *   delete:
- *     summary: Видалення обʼєкту оподаткування
- *     description: Видаляє обʼєкт оподаткування за ID.
+ *     summary: Видалення коду доходу
+ *     description: Видаляє код доходу за ID.
  *     tags: [Code-Income]
  *     parameters:
  *       - in: query
@@ -156,11 +146,15 @@ codeIncomeRouter.patch(
  *         schema:
  *           type: string
  *         required: true
- *         description: ID обʼєкту оподаткування для видалення
- *         example: 1
+ *         description: ID коду доходу для видалення
+ *         example: "48be695f-962c-49c5-9789-5fee3c6c06b0"
  *     responses:
  *       200:
- *         description: Обʼєкт успішно видалено.
+ *         description: Код доходу успішно видалено.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/CodeIncome'
  *       404:
  *         $ref: '#/components/responses/ObjectNotFound'
  *       500:

@@ -42,6 +42,47 @@ const options = {
             },
           },
         },
+        CodeIncome: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'string',
+              description: 'Унікальний ідентифікатор коду доходу',
+              example: '48be695f-962c-49c5-9789-5fee3c6c06b3',
+            },
+            code: {
+              type: 'number',
+              description: 'Код доходу',
+              example: 1234,
+            },
+            name: {
+              type: 'string',
+              description: 'Назва або опис доходу',
+              example: 'Доходи від продажу товарів',
+            },
+          },
+        },
+        EditCodeIncome: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'string',
+              description: 'Унікальний ідентифікатор коду доходу',
+              example: '48be695f-962c-49c5-9789-5fee3c6c06b3',
+            },
+            code: {
+              type: 'number',
+              description: 'Новий код доходу',
+              example: 54321,
+            },
+            name: {
+              type: 'string',
+              description: 'Оновлена назва або опис доходу',
+              example: 'Доходи від оренди майна',
+            },
+          },
+          required: ['id', 'code', 'name'],
+        },
         Katotg: {
           type: 'object',
           properties: {
@@ -250,6 +291,31 @@ const options = {
                         message: {
                           type: 'string',
                           example: "Поле 'description' обов'язкове",
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        ValidationCodeIncomeError: {
+          description: 'Помилка валідації даних',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  errors: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        field: { type: 'string', example: 'code' },
+                        message: {
+                          type: 'string',
+                          example: "Поле 'code' обов'язкове",
                         },
                       },
                     },
