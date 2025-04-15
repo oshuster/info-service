@@ -31,17 +31,17 @@ const startServer = async () => {
     );
     app.use(express.json());
 
-    app.use('api/info-service/', (req, res, next) => {
+    app.use('/info-service/', (req, res, next) => {
       req.client = client;
       next();
     });
 
-    app.use('api/info-service/professions', professionsRouter);
-    app.use('api/info-service/tax-objects', taxObjectsRouter);
-    app.use('api/info-service/katotg', katotgRouter);
-    app.use('api/info-service/kved', kvedRouter);
-    app.use('api/info-service/code-income', codeIncomeRouter);
-    app.use('api/info-service/code-insured', categoryInsuredRouter);
+    app.use('/info-service/professions', professionsRouter);
+    app.use('/info-service/tax-objects', taxObjectsRouter);
+    app.use('/info-service/katotg', katotgRouter);
+    app.use('/info-service/kved', kvedRouter);
+    app.use('/info-service/code-income', codeIncomeRouter);
+    app.use('/info-service/code-insured', categoryInsuredRouter);
 
     swaggerDocs(app, HTTP_PORT);
 
